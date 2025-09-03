@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 
@@ -216,18 +215,18 @@
 <footer class="bg-gray-800 text-white mt-12"><div class="container mx-auto px-6 py-4 text-center"><p>&copy; 2024 Guía de Práctica Clínica Interactiva - Hospital Pediátrico Notti.</p><p class="text-xs text-gray-400 mt-1">Esta herramienta es una ayuda y no reemplaza el juicio clínico profesional.</p></div></footer>
 
 <script>
-    // --- ALL JS FUNCTIONS ---
+    // --- INICIALIZACIÓN CUANDO EL DOCUMENTO ESTÁ LISTO ---
     document.addEventListener('DOMContentLoaded', () => {
         setupTheme();
         setupMobileMenu();
         setupFavorites();
         setupTabs();
         setupGlobalSearch();
-        attachCalculatorFunctions();
         setupDrugCalculator();
+        attachCalculatorFunctions(); // Carga todas las funciones de las calculadoras
     });
 
-    // --- DRUG DATABASE & CALCULATOR ---
+    // --- BASE DE DATOS DE FÁRMACOS ---
     const drugDb = {
         allopurinol: { name: 'Alopurinol', group: 'Antigotosos', dose: (w) => `Dosis diaria: <strong>${(10*w).toFixed(0)} mg</strong> (en 3 tomas).`, calculation: (w) => `Dosis (mg) = Peso (kg) × 10 mg/kg<br>= ${w} kg × 10 mg/kg = <strong>${(10*w).toFixed(0)} mg/día</strong>`},
         ceftriaxona: { name: 'Ceftriaxona', group: 'Cefalosporinas', dose: (w) => `Dosis diaria: <strong>${(100*w).toFixed(0)} mg</strong> (cada 24h).`, calculation: (w) => `Dosis (mg) = Peso (kg) × 100 mg/kg<br>= ${w} kg × 100 mg/kg = <strong>${(100*w).toFixed(0)} mg/día</strong>`},
@@ -241,6 +240,377 @@
         prednisona_pti: { name: 'Prednisona', group: 'Corticoides', dose: (w) => `Dosis PTI: <strong>${Math.min(4*w, 180).toFixed(1)} mg/día</strong> (por 4 días).`, calculation: (w) => `Dosis = ${w} kg × 4 mg/kg = ${(4*w).toFixed(1)} mg.<br>Dosis final (máx 180mg): <strong>${Math.min(4*w, 180).toFixed(1)} mg/día</strong>.`},
         metilprednisolona_pti: { name: 'Metilprednisolona', group: 'Corticoides', dose: (w) => `Dosis PTI: <strong>${Math.min(30*w, 1000).toFixed(0)} mg/dosis</strong> (por 3 días).`, calculation: (w) => `Dosis = ${w} kg × 30 mg/kg = ${(30*w).toFixed(0)} mg.<br>Dosis final (máx 1g): <strong>${Math.min(30*w, 1000).toFixed(0)} mg/dosis</strong>.`},
     };
+
+    /**
+     * Valida que el peso sea un número válido y positivo.
+     * Muestra un mensaje de error si no lo es.
+     * @param {number} weight - El peso a validar.
+     * @param {HTMLElement} resultElement - El elemento donde mostrar el error.
+     * @returns {boolean} - True si el peso es válido, false si no.
+     */
+    function validateWeight(weight, resultElement) {
+        if (!weight || weight <= 0) {
+            resultElement.innerHTML = '<p class="text-red-600">Ingrese un peso válido.</p>';
+            resultElement.classList.remove("hidden");
+            return false;
+        }
+        return true;
+    }
+    
+    // --- FUNCIONES DE CÁLCULO (ASIGNADAS GLOBALMENTE) ---
+    function attachCalculatorFunctions() {
+        // ✅ CORRECCIÓN: Se reemplazaron las comas (,) por punto y coma (;)
+        window.calculateTlsRisk = () => {
+            const resultDiv = document.getElementById("slt-risk-result");
+            const ldh = document.getElementById("slt-ldh").value;
+            let tumorType = document.getElementById("slt-tumor-type").value;
+            if (ldh === 'alto' && tumorType === 'moderado') {
+                tumorType = 'alto';
+            }
+            let riskHtml = '';
+            if (tumorType === 'alto') {
+                riskHtml = '<span class="font-bold text-red-700">RIESGO ALTO.</span> Considerar Rasburicase.';
+            } else if (tumorType === 'moderado') {
+                riskHtml = '<span class="font-bold text-orange-700">RIESGO MODERADO.</span> Iniciar Alopurinol.';
+            } else {
+                riskHtml = '<span class="font-bold text-green-700">RIESGO BAJO.</span> Monitoreo.';
+            }
+            resultDiv.innerHTML = riskHtml;
+            resultDiv.classList.remove("hidden");
+        };
+
+        window.calculateBsaAndHydration = () => {
+            const weight = parseFloat(document.getElementById("bsa-weight").value);
+            const height = parseFloat(document.getElementById("bsa-height").value);
+            const resultDiv = document.getElementById("bsa-result");
+            if (!weight || !height || weight <= 0 || height <= 0) {
+                resultDiv.innerHTML = '<p class="text-red-600">Datos inválidos.</p>';
+                resultDiv.classList.remove("hidden");
+                return;
+            }
+            if (weight < 10) {
+                resultDiv.innerHTML = `<p class="font-bold">Hidratación: ${(200 * weight).toFixed(0)} ml/día</p>`;
+            } else {
+                const bsa = Math.sqrt((weight * height) / 3600);
+                const hydration = 3000 * bsa;
+                resultDiv.innerHTML = `<p>SC: <span class="font-bold">${bsa.toFixed(2)} m²</span> | Hidratación: <span class="font-bold">${hydration.toFixed(0)} ml/día</span></p>`;
+            }
+            resultDiv.classList.remove("hidden");
+        };
+
+        window.calculateHyperkalemia = () => {
+            const weight = parseFloat(document.getElementById("kalemia-weight").value);
+            const resultDiv = document.getElementById("kalemia-result");
+            if (validateWeight(weight, resultDiv)) {
+                resultDiv.innerHTML = `<ul class="text-sm space-y-1">
+                    <li><strong class="text-blue-700 dark:text-blue-400">Gluconato Ca 10%:</strong> ${(1.5 * weight).toFixed(1)} ml</li>
+                    <li><strong class="text-blue-700 dark:text-blue-400">Sol. Polarizante:</strong> ${(0.75 * weight).toFixed(1)}g Glucosa + ${(0.075 * weight).toFixed(2)}U Insulina</li>
+                    <li><strong class="text-blue-700 dark:text-blue-400">NaHCO3:</strong> ${(1.5 * weight).toFixed(1)} mEq</li>
+                </ul>`;
+                resultDiv.classList.remove("hidden");
+            }
+        };
+
+        window.calculateIronDose = () => {
+            const weight = parseFloat(document.getElementById("iron-weight").value);
+            const hbTarget = parseFloat(document.getElementById("iron-hb-target").value);
+            const hbActual = parseFloat(document.getElementById("iron-hb-actual").value);
+            const resultDiv = document.getElementById("iron-result");
+            if (!weight || !hbTarget || !hbActual || weight <= 0) {
+                resultDiv.innerHTML = '<p class="text-red-600">Datos inválidos.</p>';
+                resultDiv.classList.remove("hidden");
+                return;
+            }
+            const ironDose = (hbTarget - hbActual) * 0.01 * weight * 80 * 3.4 * 1.5;
+            resultDiv.innerHTML = `Dosis total a reponer: <strong class="text-lg">${ironDose.toFixed(0)} mg</strong>`;
+            resultDiv.classList.remove("hidden");
+        };
+
+        window.calculateIronProphylaxis = () => {
+            const weight = parseFloat(document.getElementById("prophylaxis-weight").value);
+            const resultDiv = document.getElementById("prophylaxis-result");
+            if (validateWeight(weight, resultDiv)) {
+                const condition = document.getElementById("prophylaxis-condition").value;
+                const doses = { term: 1, "preterm-1500-2000": 2, "preterm-750-1500": 3.5, "preterm-lt-750": 5.5 };
+                const dose = doses[condition] * weight;
+                resultDiv.innerHTML = `Dosis: <strong class="text-lg">${dose.toFixed(1)} mg/día</strong> de Hierro elemental.`;
+                resultDiv.classList.remove("hidden");
+            }
+        };
+
+        window.diagnoseMicrocyticAnemia = () => {
+            const ferremia = document.getElementById("diff-ferremia").value;
+            const saturation = document.getElementById("diff-saturation").value;
+            const ferritin = document.getElementById("diff-ferritin").value;
+            const hba2 = document.getElementById("diff-hba2").value;
+            const resultDiv = document.getElementById("differential-result");
+            let diagnosis = '<span class="font-bold">Patrón no concluyente.</span>';
+            if (ferremia === 'D' && saturation === 'D' && ferritin === 'D') {
+                diagnosis = '<span class="font-bold text-green-700">Orientación: Anemia Ferropénica.</span>';
+            } else if (ferremia === 'N' && saturation === 'N' && ferritin === 'N' && hba2 === 'A') {
+                diagnosis = '<span class="font-bold text-blue-700">Orientación: Beta Talasemia.</span>';
+            } else if (ferremia === 'D' && ferritin === 'A') {
+                diagnosis = '<span class="font-bold text-orange-700">Orientación: Anemia de la Inflamación.</span>';
+            }
+            resultDiv.innerHTML = diagnosis;
+            resultDiv.classList.remove("hidden");
+        };
+
+        window.calculatePtiDose = () => {
+            const weight = parseFloat(document.getElementById("pti-weight").value);
+            const resultDiv = document.getElementById("pti-result");
+            if (validateWeight(weight, resultDiv)) {
+                const treatment = document.getElementById("pti-treatment").value;
+                let doseHtml = "";
+                if (treatment === 'prednisona') {
+                    doseHtml = `Prednisona: <strong>${Math.min(4 * weight, 180).toFixed(1)} mg/día</strong> (4 días).`;
+                } else if (treatment === 'metilprednisolona') {
+                    doseHtml = `Metilprednisolona: <strong>${Math.min(30 * weight, 1000).toFixed(0)} mg/dosis</strong> (3 dosis).`;
+                } else if (treatment === 'igiv') {
+                    doseHtml = `Inmunoglobulina IV: <strong>${(1 * weight).toFixed(1)} g/día</strong> (1-2 días).`;
+                }
+                resultDiv.innerHTML = doseHtml;
+                resultDiv.classList.remove("hidden");
+            }
+        };
+
+        window.calculateTransfusion = () => {
+            const weight = parseFloat(document.getElementById("trans-weight").value);
+            const resultDiv = document.getElementById("transfusion-result");
+            if (validateWeight(weight, resultDiv)) {
+                const component = document.querySelector('input[name="component"]:checked').value;
+                if (component === 'rbc') {
+                    resultDiv.innerHTML = `Dosis GR: <strong class="text-lg">${(10 * weight).toFixed(0)} ml</strong> (10 ml/kg).`;
+                } else {
+                    resultDiv.innerHTML = `Dosis Plaquetas: <strong class="text-lg">${Math.round(weight / 10)} U</strong> (1U c/10 kg).`;
+                }
+                resultDiv.classList.remove("hidden");
+            }
+        };
+        
+        // ✅ CORRECCIÓN: Lógica y variable 'w' corregidas
+        window.calculateIgivInfusion = () => {
+            const weight = parseFloat(document.getElementById("igiv-weight").value);
+            const resultDiv = document.getElementById("igiv-result");
+            if (validateWeight(weight, resultDiv)) {
+                const rates = [0.3, 0.6, 1.2, 2.4, 4.8, 6, 7.2];
+                const intervals = ["30", "30", "30", "30", "hasta finalizar", "hasta finalizar", "hasta finalizar"];
+                let tableHtml = `<h4 class="font-bold mb-2">Plan de Infusión Sugerido</h4>
+                    <div class="overflow-x-auto"><table class="w-full text-sm text-left">
+                    <thead class="bg-gray-200 dark:bg-gray-600"><tr>
+                    <th class="p-2">Intervalo (min)</th><th class="p-2">Velocidad (mL/kg/h)</th><th class="p-2">Velocidad (mL/hora)</th>
+                    </tr></thead><tbody>`;
+
+                rates.forEach((rate, index) => {
+                    const infusionRate = Math.min(rate * weight, 150).toFixed(1); // Usar 'weight' en lugar de 'w'
+                    tableHtml += `<tr class="border-b border-custom">
+                        <td class="p-2">${intervals[index]}</td>
+                        <td class="p-2">${rate}</td>
+                        <td class="p-2 font-bold">${infusionRate}</td>
+                    </tr>`;
+                });
+                
+                tableHtml += '</tbody></table></div><p class="text-xs mt-2 italic">Basado en plantilla Garrahan. Monitorear al paciente.</p>';
+                resultDiv.innerHTML = tableHtml;
+                resultDiv.classList.remove("hidden");
+            }
+        };
+
+        window.handleNfAlgorithm = (decision) => {
+            const section = document.getElementById("neutropenia-febril");
+            const step1 = section.querySelector("#nf-step-1");
+            const step2 = section.querySelector("#nf-step-2");
+            const resultDiv = section.querySelector("#nf-result");
+            const resetBtn = section.querySelector("#nf-reset-btn");
+            let resultHtml = "";
+            step1.classList.add("hidden");
+            if (decision === 'sepsis_yes') {
+                resultHtml = '<p class="font-bold text-red-700">Tratamiento:</p><p>Carbapenem + Vancomicina.</p>';
+                step2.classList.add("hidden");
+            } else if (decision === 'sepsis_no') {
+                step2.classList.remove("hidden");
+                return; // Espera la siguiente decisión
+            } else if (decision === 'nfar_yes') {
+                resultHtml = '<p class="font-bold text-orange-700">Tratamiento (NFAR):</p><p>Cefepime o Pipe-Tazo.</p>';
+                step2.classList.add("hidden");
+            } else if (decision === 'nfar_no') {
+                resultHtml = '<p class="font-bold text-green-700">Tratamiento (NFBR):</p><p>Ceftriaxona o Cefotaxima.</p>';
+                step2.classList.add("hidden");
+            }
+            resultDiv.innerHTML = resultHtml;
+            resultDiv.classList.remove("hidden");
+            resetBtn.classList.remove("hidden");
+        };
+
+        window.resetNfAlgorithm = () => {
+            const section = document.getElementById("neutropenia-febril");
+            section.querySelector("#nf-step-1").classList.remove("hidden");
+            section.querySelector("#nf-step-2").classList.add("hidden");
+            section.querySelector("#nf-result").classList.add("hidden");
+            section.querySelector("#nf-reset-btn").classList.add("hidden");
+        };
+
+        window.handleCvcAlgorithm = (decision) => {
+            const section = document.getElementById("neutropenia-febril");
+            const step1 = section.querySelector("#cvc-step-1");
+            const step2 = section.querySelector("#cvc-step-2");
+            const resultDiv = section.querySelector("#cvc-result");
+            const resetBtn = section.querySelector("#cvc-reset-btn");
+            let resultHtml = "";
+            step1.classList.add("hidden");
+            if (decision === 'comp_yes') {
+                resultHtml = '<p class="font-bold text-red-700">Acción:</p><p>Remover CVC + Terapia Sistémica.</p>';
+            } else if (decision === 'comp_no') {
+                step2.classList.remove("hidden");
+                return; // Espera la siguiente decisión
+            } else if (decision === 'microbe_selected') {
+                const microbe = section.querySelector("#cvc-microorganism").value;
+                if (microbe === 's_aureus') {
+                    resultHtml = '<p class="font-bold text-red-700">Acción:</p><p>Remover CVC + Terapia Sistémica.</p>';
+                } else {
+                    resultHtml = '<p class="font-bold text-green-700">Acción:</p><p>Terapia de Rescate (Sistémica + Sello).</p>';
+                }
+                step2.classList.add("hidden");
+            }
+            resultDiv.innerHTML = resultHtml;
+            resultDiv.classList.remove("hidden");
+            resetBtn.classList.remove("hidden");
+        };
+
+        window.resetCvcAlgorithm = () => {
+            const section = document.getElementById("neutropenia-febril");
+            section.querySelector("#cvc-step-1").classList.remove("hidden");
+            section.querySelector("#cvc-step-2").classList.add("hidden");
+            section.querySelector("#cvc-result").classList.add("hidden");
+            section.querySelector("#cvc-reset-btn").classList.add("hidden");
+        };
+    }
+    
+    // --- FUNCIONES DE LA INTERFAZ DE USUARIO (UI) ---
+    function setupTheme() {
+        const toggle = document.getElementById("theme-toggle");
+        const lightIcon = document.getElementById("theme-icon-light");
+        const darkIcon = document.getElementById("theme-icon-dark");
+        const applyTheme = (theme) => {
+            document.documentElement.classList.toggle("dark", theme === 'dark');
+            lightIcon.classList.toggle("hidden", theme === 'dark');
+            darkIcon.classList.toggle("hidden", theme !== 'dark');
+        };
+        let currentTheme = localStorage.getItem("theme") || "light";
+        applyTheme(currentTheme);
+        toggle.addEventListener("click", () => {
+            currentTheme = document.documentElement.classList.contains("dark") ? "light" : "dark";
+            localStorage.setItem("theme", currentTheme);
+            applyTheme(currentTheme);
+        });
+    }
+
+    function setupMobileMenu() {
+        document.getElementById("mobile-menu-button").addEventListener("click", () => {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+    }
+
+    function setupTabs() {
+        document.querySelectorAll(".tab-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                const tabId = button.dataset.tab;
+                const card = button.closest(".bg-card");
+                card.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                card.querySelectorAll(".tab-content").forEach(content => {
+                    content.classList.toggle("active", content.id === `tab-content-${tabId}`);
+                });
+            });
+        });
+    }
+
+    function setupFavorites() {
+        const toggleBtn = document.getElementById("favorites-toggle-btn");
+        const closeBtn = document.getElementById("close-favorites-btn");
+        const panel = document.getElementById("favorites-panel");
+        toggleBtn.addEventListener("click", () => panel.classList.remove("translate-x-full"));
+        closeBtn.addEventListener("click", () => panel.classList.add("translate-x-full"));
+        loadFavorites();
+        document.querySelectorAll(".favorite-btn").forEach(button => {
+            button.addEventListener("click", (e) => {
+                e.stopPropagation();
+                toggleFavorite(button.dataset.id, button.dataset.title);
+            });
+        });
+    }
+
+    function getFavorites() {
+        return JSON.parse(localStorage.getItem("hemoncoFavoritesV5")) || [];
+    }
+
+    function saveFavorites(favorites) {
+        localStorage.setItem("hemoncoFavoritesV5", JSON.stringify(favorites));
+        loadFavorites();
+    }
+
+    function toggleFavorite(id, title) {
+        let favorites = getFavorites();
+        const index = favorites.findIndex(fav => fav.id === id);
+        if (index > -1) {
+            favorites.splice(index, 1);
+        } else {
+            favorites.push({ id, title });
+        }
+        saveFavorites(favorites);
+    }
+
+    function loadFavorites() {
+        const favorites = getFavorites();
+        document.querySelectorAll(".favorite-btn").forEach(button => {
+            button.classList.toggle("saved", favorites.some(fav => fav.id === button.dataset.id));
+        });
+        const list = document.getElementById("favorites-list");
+        if (favorites.length === 0) {
+            list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">Guarde secciones con ★ para verlas aquí.</p>';
+            return;
+        }
+        list.innerHTML = favorites.map(fav =>
+            `<a href="#${fav.id}" class="block p-2 bg-gray-100 dark:bg-gray-700 rounded hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors text-sm">${fav.title}</a>`
+        ).join("");
+        list.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("favorites-panel").classList.add("translate-x-full");
+            });
+        });
+    }
+
+    function setupGlobalSearch() {
+        const searchInput = document.getElementById("global-search-input");
+        const search = (query) => {
+            removeHighlights();
+            if (query.length < 3) return;
+            const regex = new RegExp(query, "gi");
+            highlightText(document.getElementById("main-content"), regex);
+        };
+        const highlightText = (node, regex) => {
+            if (node.nodeType === 3) { // Text node
+                if (node.nodeValue.match(regex)) {
+                    const span = document.createElement("span");
+                    span.innerHTML = node.nodeValue.replace(regex, match => `<span class="highlight">${match}</span>`);
+                    node.parentNode.replaceChild(span, node);
+                }
+            } else if (node.nodeType === 1 && node.childNodes && !/script|style|svg/i.test(node.tagName)) {
+                node.childNodes.forEach(child => highlightText(child, regex));
+            }
+        };
+        searchInput.addEventListener("input", (e) => search(e.target.value));
+    }
+
+    function removeHighlights() {
+        document.querySelectorAll("span.highlight").forEach(el => {
+            const parent = el.parentNode;
+            if (parent) {
+                parent.replaceChild(document.createTextNode(el.textContent), el);
+                parent.normalize();
+            }
+        });
+    }
 
     function setupDrugCalculator() {
         const select = document.getElementById('drug-select');
@@ -274,19 +644,6 @@
             resultDiv.classList.remove('hidden');
         });
     }
-    
-    // --- ALL OTHER FUNCTIONS ---
-    function attachCalculatorFunctions(){window.validateWeight=(t,e)=>{if(!t||t<=0)return e.innerHTML='<p class="text-red-600">Ingrese un peso válido.</p>',e.classList.remove("hidden"),!1;return!0},window.calculateTlsRisk=()=>{const t=document.getElementById("slt-risk-result"),e=document.getElementById("slt-ldh").value;let l=document.getElementById("slt-tumor-type").value;"alto"===e&&"moderado"===l&&(l="alto");let d="";"alto"===l?d='<span class="font-bold text-red-700">RIESGO ALTO.</span> Considerar Rasburicase.':"moderado"===l?d='<span class="font-bold text-orange-700">RIESGO MODERADO.</span> Iniciar Alopurinol.':d='<span class="font-bold text-green-700">RIESGO BAJO.</span> Monitoreo.',t.innerHTML=d,t.classList.remove("hidden")},window.calculateBsaAndHydration=()=>{const t=parseFloat(document.getElementById("bsa-weight").value),e=parseFloat(document.getElementById("bsa-height").value),l=document.getElementById("bsa-result");if(!t||!e||t<=0||e<=0)return l.innerHTML='<p class="text-red-600">Datos inválidos.</p>',l.classList.remove("hidden"),void 0;t<10?l.innerHTML=`<p class="font-bold">Hidratación: ${(200*t).toFixed(0)} ml/día</p>`:l.innerHTML=`<p>SC: <span class="font-bold">${Math.sqrt(t*e/3600).toFixed(2)} m²</span> | Hidratación: <span class="font-bold">${(3e3*Math.sqrt(t*e/3600)).toFixed(0)} ml/día</span></p>`,l.classList.remove("hidden")},window.calculateHyperkalemia=()=>{const t=parseFloat(document.getElementById("kalemia-weight").value),e=document.getElementById("kalemia-result");if(validateWeight(t,e)){e.innerHTML=`<ul class="text-sm space-y-1"><li><strong class="text-blue-700 dark:text-blue-400">Gluconato Ca 10%:</strong> ${(1.5*t).toFixed(1)} ml</li><li><strong class="text-blue-700 dark:text-blue-400">Sol. Polarizante:</strong> ${(0.75*t).toFixed(1)}g Glucosa + ${(0.075*t).toFixed(2)}U Insulina</li><li><strong class="text-blue-700 dark:text-blue-400">NaHCO3:</strong> ${(1.5*t).toFixed(1)} mEq</li></ul>`,e.classList.remove("hidden")}},window.calculateIronDose=()=>{const t=parseFloat(document.getElementById("iron-weight").value),e=parseFloat(document.getElementById("iron-hb-target").value),l=parseFloat(document.getElementById("iron-hb-actual").value),d=document.getElementById("iron-result");if(!t||!e||!l||t<=0)return d.innerHTML='<p class="text-red-600">Datos inválidos.</p>',d.classList.remove("hidden"),void 0;const n=(e-l)*.01*t*80*3.4*1.5;d.innerHTML=`Dosis total a reponer: <strong class="text-lg">${n.toFixed(0)} mg</strong>`,d.classList.remove("hidden")},window.calculateIronProphylaxis=()=>{const t=parseFloat(document.getElementById("prophylaxis-weight").value),e=document.getElementById("prophylaxis-result");if(validateWeight(t,e)){const l=document.getElementById("prophylaxis-condition").value,d={term:1,"preterm-1500-2000":2,"preterm-750-1500":3.5,"preterm-lt-750":5.5};e.innerHTML=`Dosis: <strong class="text-lg">${(d[l]*t).toFixed(1)} mg/día</strong> de Hierro elemental.`,e.classList.remove("hidden")}},window.diagnoseMicrocyticAnemia=()=>{const t=document.getElementById("diff-ferremia").value,e=document.getElementById("diff-saturation").value,l=document.getElementById("diff-ferritin").value,d=document.getElementById("diff-hba2").value,n=document.getElementById("differential-result");let i='<span class="font-bold">Patrón no concluyente.</span>';"D"===t&&"D"===e&&"D"===l?i='<span class="font-bold text-green-700">Orientación: Anemia Ferropénica.</span>':"N"===t&&"N"===e&&"N"===l&&"A"===d?i='<span class="font-bold text-blue-700">Orientación: Beta Talasemia.</span>':"D"===t&&"A"===l&&(i='<span class="font-bold text-orange-700">Orientación: Anemia de la Inflamación.</span>'),n.innerHTML=i,n.classList.remove("hidden")},window.calculatePtiDose=()=>{const t=parseFloat(document.getElementById("pti-weight").value),e=document.getElementById("pti-result");if(validateWeight(t,e)){const l=document.getElementById("pti-treatment").value;let d="";"prednisona"===l?d=`Prednisona: <strong>${Math.min(4*t,180).toFixed(1)} mg/día</strong> (4 días).`:"metilprednisolona"===l?d=`Metilprednisolona: <strong>${Math.min(30*t,1e3).toFixed(0)} mg/dosis</strong> (3 dosis).`:"igiv"===l&&(d=`Inmunoglobulina IV: <strong>${(1*t).toFixed(1)} g/día</strong> (1-2 días).`),e.innerHTML=d,e.classList.remove("hidden")}},window.calculateTransfusion=()=>{const t=parseFloat(document.getElementById("trans-weight").value),e=document.getElementById("transfusion-result");if(validateWeight(t,e)){e.innerHTML="rbc"===document.querySelector('input[name="component"]:checked').value?`Dosis GR: <strong class="text-lg">${(10*t).toFixed(0)} ml</strong> (10 ml/kg).`:`Dosis Plaquetas: <strong class="text-lg">${Math.round(t/10)} U</strong> (1U c/10 kg).`,e.classList.remove("hidden")}},window.calculateIgivInfusion=()=>{const t=parseFloat(document.getElementById("igiv-weight").value),e=document.getElementById("igiv-result");if(validateWeight(t,e)){const l=[.3,.6,1.2,2.4,4.8,6,7.2],d=["30","30","30","30","hasta finalizar","hasta finalizar","hasta finalizar"];let n='<h4 class="font-bold mb-2">Plan de Infusión Sugerido</h4><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-gray-200 dark:bg-gray-600"><tr><th class="p-2">Intervalo (min)</th><th class="p-2">Velocidad (mL/kg/h)</th><th class="p-2">Velocidad (mL/hora)</th></tr></thead><tbody>`;l.forEach((t,e)=>{n+=`<tr class="border-b border-custom"><td class="p-2">${d[e]}</td><td class="p-2">${t}</td><td class="p-2 font-bold">${Math.min(t*w,150).toFixed(1)}</td></tr>`}),n+='</tbody></table></div><p class="text-xs mt-2 italic">Basado en plantilla Garrahan. Monitorear al paciente.</p>',e.innerHTML=n,e.classList.remove("hidden")}},window.handleNfAlgorithm=t=>{const e=document.getElementById("neutropenia-febril"),l=e.querySelector("#nf-step-1"),d=e.querySelector("#nf-step-2"),n=e.querySelector("#nf-result"),i=e.querySelector("#nf-reset-btn");let o="";l.classList.add("hidden"),"sepsis_yes"===t?o='<p class="font-bold text-red-700">Tratamiento:</p><p>Carbapenem + Vancomicina.</p>':"sepsis_no"===t?(d.classList.remove("hidden"),void 0):("nfar_yes"===t?(o='<p class="font-bold text-orange-700">Tratamiento (NFAR):</p><p>Cefepime o Pipe-Tazo.</p>',d.classList.add("hidden")):"nfar_no"===t&&(o='<p class="font-bold text-green-700">Tratamiento (NFBR):</p><p>Ceftriaxona o Cefotaxima.</p>',d.classList.add("hidden")),n.innerHTML=o,n.classList.remove("hidden"),i.classList.remove("hidden"))},window.resetNfAlgorithm=()=>{const t=document.getElementById("neutropenia-febril");t.querySelector("#nf-step-1").classList.remove("hidden"),t.querySelector("#nf-step-2").classList.add("hidden"),t.querySelector("#nf-result").classList.add("hidden"),t.querySelector("#nf-reset-btn").classList.add("hidden")},window.handleCvcAlgorithm=t=>{const e=document.getElementById("neutropenia-febril"),l=e.querySelector("#cvc-step-1"),d=e.querySelector("#cvc-step-2"),n=e.querySelector("#cvc-result"),i=e.querySelector("#cvc-reset-btn");let o="";l.classList.add("hidden"),"comp_yes"===t?o='<p class="font-bold text-red-700">Acción:</p><p>Remover CVC + Terapia Sistémica.</p>':"comp_no"===t?(d.classList.remove("hidden"),void 0):"microbe_selected"===t&&(o="s_aureus"===e.querySelector("#cvc-microorganism").value?'<p class="font-bold text-red-700">Acción:</p><p>Remover CVC + Terapia Sistémica.</p>':'<p class="font-bold text-green-700">Acción:</p><p>Terapia de Rescate (Sistémica + Sello).</p>',d.classList.add("hidden")),n.innerHTML=o,n.classList.remove("hidden"),i.classList.remove("hidden")},window.resetCvcAlgorithm=()=>{const t=document.getElementById("neutropenia-febril");t.querySelector("#cvc-step-1").classList.remove("hidden"),t.querySelector("#cvc-step-2").classList.add("hidden"),t.querySelector("#cvc-result").classList.add("hidden"),t.querySelector("#cvc-reset-btn").classList.add("hidden")}};
-    function setupTheme(){const t=document.getElementById("theme-toggle"),e=document.getElementById("theme-icon-light"),l=document.getElementById("theme-icon-dark"),d=t=>{document.documentElement.classList.toggle("dark","dark"===t),e.classList.toggle("hidden","dark"===t),l.classList.toggle("hidden","dark"!==t)};let n=localStorage.getItem("theme")||"light";d(n),t.addEventListener("click",()=>{n="dark"===document.documentElement.classList.contains("dark")?"light":"dark",localStorage.setItem("theme",n),d(n)})}
-    function setupMobileMenu(){document.getElementById("mobile-menu-button").addEventListener("click",()=>document.getElementById("mobile-menu").classList.toggle("hidden"))}
-    function setupTabs(){document.querySelectorAll(".tab-btn").forEach(t=>t.addEventListener("click",()=>{const e=t.dataset.tab,l=t.closest(".bg-card");l.querySelectorAll(".tab-btn").forEach(t=>t.classList.remove("active")),t.classList.add("active"),l.querySelectorAll(".tab-content").forEach(t=>t.classList.toggle("active",t.id===`tab-content-${e}`))}))}
-    function setupFavorites(){const t=document.getElementById("favorites-toggle-btn"),e=document.getElementById("close-favorites-btn"),l=document.getElementById("favorites-panel");t.addEventListener("click",()=>l.classList.remove("translate-x-full")),e.addEventListener("click",()=>l.classList.add("translate-x-full")),loadFavorites(),document.querySelectorAll(".favorite-btn").forEach(t=>t.addEventListener("click",e=>{e.stopPropagation(),toggleFavorite(t.dataset.id,t.dataset.title)}))}
-    function getFavorites(){return JSON.parse(localStorage.getItem("hemoncoFavoritesV5"))||[]}
-    function saveFavorites(t){localStorage.setItem("hemoncoFavoritesV5",JSON.stringify(t)),loadFavorites()}
-    function toggleFavorite(t,e){let l=getFavorites(),d=l.findIndex(e=>e.id===t);d>-1?l.splice(d,1):l.push({id:t,title:e}),saveFavorites(l)}
-    function loadFavorites(){const t=getFavorites();document.querySelectorAll(".favorite-btn").forEach(e=>e.classList.toggle("saved",t.some(t=>t.id===e.dataset.id)));const e=document.getElementById("favorites-list");if(0===t.length)return void(e.innerHTML='<p class="text-sm text-gray-500 dark:text-gray-400">Guarde secciones con ★ para verlas aquí.</p>');e.innerHTML=t.map(t=>`<a href="#${t.id}" class="block p-2 bg-gray-100 dark:bg-gray-700 rounded hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors text-sm">${t.title}</a>`).join(""),e.querySelectorAll("a").forEach(t=>t.addEventListener("click",()=>document.getElementById("favorites-panel").classList.add("translate-x-full")))}
-    function setupGlobalSearch(){const t=document.getElementById("global-search-input"),e=l=>{removeHighlights();if(l.length<3)return;const d=new RegExp(l,"gi");n(document.getElementById("main-content"),d)},n=(t,e)=>{if(3===t.nodeType){if(t.nodeValue.match(e)){const l=document.createElement("span");l.innerHTML=t.nodeValue.replace(e,t=>`<span class="highlight">${t}</span>`),t.parentNode.replaceChild(l,t)}}else 1===t.nodeType&&t.childNodes&&!/script|style|svg/i.test(t.tagName)&&t.childNodes.forEach(t=>n(t,e))};t.addEventListener("input",t=>e(t.target.value))}
-    function removeHighlights(){document.querySelectorAll("span.highlight").forEach(t=>{const e=t.parentNode;e&&(e.replaceChild(document.createTextNode(t.textContent),t),e.normalize())})}
 </script>
 
 </body>
