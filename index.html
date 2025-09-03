@@ -192,7 +192,7 @@
                         <div class="mb-4">
                             <input type="text" id="drug-search" placeholder="Buscar antimicrobiano (ej. Cefepime)..." class="w-full p-2 border border-gray-300 rounded-md">
                         </div>
-                        <div class="overflow-x-auto max-h-60">
+                        <div class="overflow-x-auto max-h-72">
                             <table class="w-full text-left border-collapse" id="drug-table">
                                 <thead class="bg-gray-100 sticky top-0">
                                     <tr>
@@ -203,14 +203,18 @@
                                 </thead>
                                 <tbody>
                                     <tr class="border-b"><td>Ceftriaxona</td><td>100 mg/kg/día</td><td>24</td></tr>
+                                    <tr class="border-b"><td>Ceftazidima</td><td>100-150 mg/kg/día</td><td>6-8</td></tr>
                                     <tr class="border-b"><td>Cefotaxima</td><td>100-150 mg/kg/día</td><td>6-8</td></tr>
                                     <tr class="border-b"><td>Cefepime</td><td>100 mg/kg/día</td><td>8</td></tr>
                                     <tr class="border-b"><td>Piperacilina-Tazobactam</td><td>300 mg/kg/día</td><td>6-8</td></tr>
                                     <tr class="border-b"><td>Meropenem</td><td>60 mg/kg/día</td><td>8</td></tr>
                                     <tr class="border-b"><td>Imipenem</td><td>40-60 mg/kg/día</td><td>8</td></tr>
+                                    <tr class="border-b"><td>Aztreonam</td><td>90-120 mg/kg/día</td><td>6-8</td></tr>
                                     <tr class="border-b"><td>Vancomicina</td><td>40-60 mg/kg/día</td><td>6</td></tr>
                                     <tr class="border-b"><td>Amikacina</td><td>15-20 mg/kg/día</td><td>24</td></tr>
                                     <tr class="border-b"><td>Ciprofloxacina</td><td>20-30 mg/kg/día</td><td>12</td></tr>
+                                    <tr class="border-b"><td>Claritromicina</td><td>15 mg/kg/día</td><td>12</td></tr>
+                                    <tr class="border-b"><td>Aciclovir</td><td>15-30 mg/kg/día</td><td>8</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -228,45 +232,69 @@
                 <div class="space-y-8">
                      <p>Emergencia oncológica causada por la destrucción masiva de células malignas, que libera su contenido intracelular al torrente sanguíneo, llevando a hiperuricemia, hiperkalemia, hiperfosfatemia e hipocalcemia.</p>
 
-                    <div class="calculator-card border-red-500">
-                         <h3 class="text-lg font-semibold mb-3 text-red-800 flex justify-between">Calculadora de Riesgo de SLT <span class="favorite-btn" data-id="calc-riesgo-slt" data-title="Calculadora Riesgo SLT">★</span></h3>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="slt-tumor-type" class="block text-sm font-medium">Tipo de Tumor</label>
-                                <select id="slt-tumor-type" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                                    <option value="bajo">Leucemia Mieloide Crónica</option>
-                                    <option value="moderado">LMA (Leucocitos 25-100k)</option>
-                                    <option value="alto">Linfoma de Burkitt</option>
-                                    <option value="alto">LLA (Leucocitos ≥100k)</option>
-                                    <option value="alto">LMA (Leucocitos ≥100k)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="slt-ldh" class="block text-sm font-medium">LDH</label>
-                                <select id="slt-ldh" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                                    <option value="normal">&lt; 2x LSN</option>
-                                    <option value="alto">&ge; 2x LSN</option>
-                                </select>
-                            </div>
-                         </div>
-                         <button onclick="calculateTlsRisk()" class="mt-4 w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Calcular Riesgo</button>
-                         <div id="slt-risk-result" class="mt-4 p-3 bg-red-100 rounded-md text-center hidden"></div>
-                    </div>
-                    
-                    <div class="calculator-card border-green-500">
-                        <h3 class="text-lg font-semibold mb-3 text-green-800 flex justify-between">Calculadora de Hidratación <span class="favorite-btn" data-id="calc-hidratacion" data-title="Calculadora Hidratación">★</span></h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="bsa-weight" class="block text-sm font-medium">Peso (kg)</label>
-                                <input type="number" id="bsa-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                            </div>
-                             <div>
-                                <label for="bsa-height" class="block text-sm font-medium">Altura (cm)</label>
-                                <input type="number" id="bsa-height" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                            </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="calculator-card border-red-500">
+                             <h3 class="text-lg font-semibold mb-3 text-red-800 flex justify-between">Calculadora de Riesgo de SLT <span class="favorite-btn" data-id="calc-riesgo-slt" data-title="Calculadora Riesgo SLT">★</span></h3>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="slt-tumor-type" class="block text-sm font-medium">Tipo de Tumor</label>
+                                    <select id="slt-tumor-type" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                        <option value="bajo">Leucemia Mieloide Crónica</option>
+                                        <option value="moderado">LMA (Leucocitos 25-100k)</option>
+                                        <option value="alto">Linfoma de Burkitt</option>
+                                        <option value="alto">LLA (Leucocitos ≥100k)</option>
+                                        <option value="alto">LMA (Leucocitos ≥100k)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="slt-ldh" class="block text-sm font-medium">LDH</label>
+                                    <select id="slt-ldh" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                        <option value="normal">&lt; 2x LSN</option>
+                                        <option value="alto">&ge; 2x LSN</option>
+                                    </select>
+                                </div>
+                             </div>
+                             <button onclick="calculateTlsRisk()" class="mt-4 w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Calcular Riesgo</button>
+                             <div id="slt-risk-result" class="mt-4 p-3 bg-red-100 rounded-md text-center hidden"></div>
                         </div>
-                        <button onclick="calculateBsaAndHydration()" class="mt-4 w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Calcular</button>
-                        <div id="bsa-result" class="mt-4 p-3 bg-green-100 rounded-md text-center hidden"></div>
+                        
+                        <div class="calculator-card border-green-500">
+                            <h3 class="text-lg font-semibold mb-3 text-green-800 flex justify-between">Calculadora de Hidratación <span class="favorite-btn" data-id="calc-hidratacion" data-title="Calculadora Hidratación">★</span></h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="bsa-weight" class="block text-sm font-medium">Peso (kg)</label>
+                                    <input type="number" id="bsa-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                </div>
+                                 <div>
+                                    <label for="bsa-height" class="block text-sm font-medium">Altura (cm)</label>
+                                    <input type="number" id="bsa-height" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                </div>
+                            </div>
+                            <button onclick="calculateBsaAndHydration()" class="mt-4 w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Calcular</button>
+                            <div id="bsa-result" class="mt-4 p-3 bg-green-100 rounded-md text-center hidden"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="calculator-card border-yellow-500">
+                             <h3 class="text-lg font-semibold mb-3 text-yellow-800 flex justify-between">Calculadora Dosis de Alopurinol <span class="favorite-btn" data-id="calc-alopurinol" data-title="Calculadora Alopurinol">★</span></h3>
+                             <div>
+                                <label for="alopurinol-weight" class="block text-sm font-medium">Peso (kg)</label>
+                                <input type="number" id="alopurinol-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                             <button onclick="calculateAllopurinol()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular Dosis</button>
+                             <div id="alopurinol-result" class="mt-4 p-3 bg-yellow-100 rounded-md text-center hidden"></div>
+                        </div>
+
+                        <div class="calculator-card border-red-500">
+                             <h3 class="text-lg font-semibold mb-3 text-red-800 flex justify-between">Calculadora de Hiperkalemia <span class="favorite-btn" data-id="calc-hiperkalemia" data-title="Calculadora Hiperkalemia">★</span></h3>
+                             <div>
+                                <label for="kalemia-weight" class="block text-sm font-medium">Peso (kg)</label>
+                                <input type="number" id="kalemia-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                             <button onclick="calculateHyperkalemia()" class="mt-4 w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Calcular Dosis</button>
+                             <div id="kalemia-result" class="mt-4 p-3 bg-red-100 rounded-md hidden"></div>
+                        </div>
                     </div>
 
                     <details class="bg-gray-50 p-4 rounded-lg">
@@ -362,6 +390,7 @@
                     <div class="border-b border-gray-200">
                         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
                             <button class="tab-btn active" data-tab="calculators">Calculadoras</button>
+                            <button class="tab-btn" data-tab="differential">Diagnóstico Diferencial</button>
                             <button class="tab-btn" data-tab="micro">Microcítica</button>
                             <button class="tab-btn" data-tab="normo">Normocítica</button>
                             <button class="tab-btn" data-tab="macro">Macrocítica</button>
@@ -369,16 +398,52 @@
                     </div>
 
                     <div id="tab-content-calculators" class="tab-content active">
-                        <div class="calculator-card border-yellow-500">
-                            <h3 class="text-lg font-semibold mb-3 text-yellow-800 flex justify-between">Calculadora Dosis de Hierro Parenteral (Ferropénica) <span class="favorite-btn" data-id="calc-hierro" data-title="Calculadora Hierro EV">★</span></h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div><label class="text-sm">Peso (kg)</label><input type="number" id="iron-weight" class="mt-1 w-full p-2 border rounded"></div>
-                                <div><label class="text-sm">Hb Teórica (g/dL)</label><input type="number" id="iron-hb-target" class="mt-1 w-full p-2 border rounded" value="12"></div>
-                                <div><label class="text-sm">Hb Real (g/dL)</label><input type="number" id="iron-hb-actual" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                             <div class="calculator-card border-yellow-500">
+                                <h3 class="text-lg font-semibold mb-3 text-yellow-800 flex justify-between">Calculadora Dosis de Hierro Parenteral (Ferropénica) <span class="favorite-btn" data-id="calc-hierro" data-title="Calculadora Hierro EV">★</span></h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div><label class="text-sm">Peso (kg)</label><input type="number" id="iron-weight" class="mt-1 w-full p-2 border rounded"></div>
+                                    <div><label class="text-sm">Hb Teórica (g/dL)</label><input type="number" id="iron-hb-target" class="mt-1 w-full p-2 border rounded" value="12"></div>
+                                    <div><label class="text-sm">Hb Real (g/dL)</label><input type="number" id="iron-hb-actual" class="mt-1 w-full p-2 border rounded"></div>
+                                </div>
+                                <button onclick="calculateIronDose()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular</button>
+                                <div id="iron-result" class="mt-4 p-3 bg-yellow-100 rounded-md text-center hidden"></div>
+                                <p class="text-xs text-gray-500 mt-2">Fórmula: (Hb teórica - Hb real) x Volemia (80ml/kg) x 3.4 x 1.5 / 100.</p>
                             </div>
-                            <button onclick="calculateIronDose()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular</button>
-                            <div id="iron-result" class="mt-4 p-3 bg-yellow-100 rounded-md text-center hidden"></div>
-                            <p class="text-xs text-gray-500 mt-2">Fórmula: (Hb teórica - Hb real) x Volemia (80ml/kg) x 3.4 x 1.5 / 100.</p>
+                            <div class="calculator-card border-teal-500">
+                                <h3 class="text-lg font-semibold mb-3 text-teal-800 flex justify-between">Calculadora Profilaxis de Hierro en Lactantes <span class="favorite-btn" data-id="calc-profilaxis-hierro" data-title="Calculadora Profilaxis Hierro">★</span></h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm">Condición</label>
+                                        <select id="prophylaxis-condition" class="mt-1 w-full p-2 border rounded">
+                                            <option value="term">RN de Término</option>
+                                            <option value="preterm-1500-2000">RN Pretérmino (1500-2000g)</option>
+                                            <option value="preterm-750-1500">RN Pretérmino (750-1500g)</option>
+                                            <option value="preterm-lt-750">RN Pretérmino (<750g)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm">Peso (kg)</label>
+                                        <input type="number" id="prophylaxis-weight" class="mt-1 w-full p-2 border rounded">
+                                    </div>
+                                </div>
+                                <button onclick="calculateIronProphylaxis()" class="mt-4 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600">Calcular Profilaxis</button>
+                                <div id="prophylaxis-result" class="mt-4 p-3 bg-teal-100 rounded-md text-center hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-content-differential" class="tab-content">
+                        <h3 class="text-xl font-semibold mb-2">Ayuda Diagnóstica de Anemia Microcítica</h3>
+                        <div class="calculator-card border-cyan-500">
+                            <p class="mb-4 text-sm">Ingrese los valores de laboratorio para obtener una orientación diagnóstica basada en la "Tabla 9. Diagnóstico diferencial de anemias microcíticas hipocrómicas" de la guía.</p>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div><label class="text-sm">Ferremia</label><select id="diff-ferremia" class="mt-1 w-full p-2 border rounded"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Sat. Transferrina</label><select id="diff-saturation" class="mt-1 w-full p-2 border rounded"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Ferritina Sérica</label><select id="diff-ferritin" class="mt-1 w-full p-2 border rounded"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Hb A2</label><select id="diff-hba2" class="mt-1 w-full p-2 border rounded"><option value="N">Normal/Disminuida</option><option value="A">Aumentada</option></select></div>
+                            </div>
+                            <button onclick="diagnoseMicrocyticAnemia()" class="mt-4 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Analizar</button>
+                            <div id="differential-result" class="mt-4 p-3 bg-cyan-100 rounded-md text-center hidden"></div>
                         </div>
                     </div>
                     <div id="tab-content-micro" class="tab-content">
@@ -463,12 +528,9 @@
                     <span>Guía Completa en PDF</span>
                      <span class="favorite-btn" data-id="guia-pdf" data-title="Visor PDF Guía Completa">★</span>
                 </h2>
-                <div class="text-center mb-6">
-                    <p class="mb-4">Para una referencia detallada, consulte o descargue el documento original.</p>
-                    <a href="Hematología y Oncologia Notti.pdf" download="Guia_Hemo-Onco_Notti.pdf" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors">Descargar PDF</a>
-                </div>
-                <div class="border-4 border-gray-200 rounded-lg overflow-hidden hidden md:block">
-                    <embed src="Hematología y Oncologia Notti.pdf" type="application/pdf" width="100%" height="800px" />
+                 <div class="text-center mb-6">
+                    <p class="mb-4">Para una referencia detallada, consulte el documento original.</p>
+                    <a href="https://drive.google.com/file/d/1yL1qRgwMIV56bgpHFk1Mnbpa0NdwaeXN/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors">Ver Guía en Línea</a>
                 </div>
             </div>
         </section>
@@ -630,8 +692,8 @@
         const hbActual = parseFloat(document.getElementById('iron-hb-actual').value);
         const resultDiv = document.getElementById('iron-result');
 
-        if (!weight || !hbTarget || !hbActual) {
-            resultDiv.innerHTML = `<p class="text-red-600">Complete todos los campos.</p>`;
+        if (!weight || !hbTarget || !hbActual || weight <=0 ) {
+            resultDiv.innerHTML = `<p class="text-red-600">Complete todos los campos con valores válidos.</p>`;
             resultDiv.classList.remove('hidden');
             return;
         }
@@ -670,6 +732,84 @@
         resultDiv.innerHTML = doseText;
         resultDiv.classList.remove('hidden');
     }
+
+    function calculateAllopurinol() {
+        const weight = parseFloat(document.getElementById('alopurinol-weight').value);
+        const resultDiv = document.getElementById('alopurinol-result');
+        if (!weight || weight <= 0) {
+            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
+            resultDiv.classList.remove('hidden');
+            return;
+        }
+        const dose = 10 * weight;
+        resultDiv.innerHTML = `Dosis diaria total: <strong class="text-lg">${dose.toFixed(0)} mg</strong><p class="text-sm">(Administrar en 3 tomas, c/8hs)</p>`;
+        resultDiv.classList.remove('hidden');
+    }
+
+    function calculateHyperkalemia() {
+        const weight = parseFloat(document.getElementById('kalemia-weight').value);
+        const resultDiv = document.getElementById('kalemia-result');
+        if (!weight || weight <= 0) {
+            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
+            resultDiv.classList.remove('hidden');
+            return;
+        }
+        const gluconate = (1.5 * weight).toFixed(1);
+        const glucose = (0.75 * weight).toFixed(1);
+        const insulin = (0.075 * weight).toFixed(2);
+        const bicarbonate = (1.5 * weight).toFixed(1);
+
+        resultDiv.innerHTML = `
+            <p><strong class="text-blue-700">Gluconato de Calcio 10%:</strong> ${gluconate} ml (1-2 ml/kg)</p>
+            <p><strong class="text-blue-700">Sol. Glucosa + Insulina:</strong> ${glucose} g de Glucosa + ${insulin} U de Insulina</p>
+            <p><strong class="text-blue-700">Bicarbonato de Sodio (NaHCO3):</strong> ${bicarbonate} mEq (1-2 mEq/kg)</p>
+            <p class="mt-2 text-xs">Considerar Salbutamol NBZ. Dosis basadas en la guía de referencia.</p>
+        `;
+        resultDiv.classList.remove('hidden');
+    }
+
+    function calculateIronProphylaxis() {
+        const weight = parseFloat(document.getElementById('prophylaxis-weight').value);
+        const condition = document.getElementById('prophylaxis-condition').value;
+        const resultDiv = document.getElementById('prophylaxis-result');
+        if (!weight || weight <= 0) {
+            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
+            resultDiv.classList.remove('hidden');
+            return;
+        }
+        let doseMultiplier = 1;
+        if (condition === 'preterm-1500-2000') doseMultiplier = 2;
+        else if (condition === 'preterm-750-1500') doseMultiplier = 3.5; // Average of 3-4
+        else if (condition === 'preterm-lt-750') doseMultiplier = 5.5; // Average of 5-6
+
+        const dose = (doseMultiplier * weight).toFixed(1);
+        resultDiv.innerHTML = `Dosis de Hierro elemental: <strong class="text-lg">${dose} mg/día</strong>`;
+        resultDiv.classList.remove('hidden');
+    }
+    
+    function diagnoseMicrocyticAnemia() {
+        const ferremia = document.getElementById('diff-ferremia').value;
+        const saturation = document.getElementById('diff-saturation').value;
+        const ferritin = document.getElementById('diff-ferritin').value;
+        const hba2 = document.getElementById('diff-hba2').value;
+        const resultDiv = document.getElementById('differential-result');
+        
+        let diagnosis = '<span class="font-bold text-gray-700">Patrón no concluyente.</span> Revise los valores o considere otras patologías.';
+
+        if (ferremia === 'D' && saturation === 'D' && ferritin === 'D') {
+            diagnosis = '<span class="font-bold text-green-700">Orientación: Anemia Ferropénica.</span>';
+        } else if (ferremia === 'N' && saturation === 'N' && ferritin === 'N' && hba2 === 'A') {
+            diagnosis = '<span class="font-bold text-blue-700">Orientación: Beta Talasemia Heterocigota.</span>';
+        } else if (ferremia === 'D' && saturation === 'D' && ferritin === 'A') {
+            diagnosis = '<span class="font-bold text-orange-700">Orientación: Anemia de la Inflamación.</span>';
+        } else if (ferremia === 'A' && saturation === 'A' && ferritin === 'A') {
+            diagnosis = '<span class="font-bold text-purple-700">Orientación: Anemia Sideroblástica.</span>';
+        }
+
+        resultDiv.innerHTML = diagnosis;
+        resultDiv.classList.remove('hidden');
+    }
+
 
     // --- TABLE FILTERING ---
     function setupTableFilter(inputId, tableId) {
@@ -796,4 +936,3 @@
 
 </body>
 </html>
-
