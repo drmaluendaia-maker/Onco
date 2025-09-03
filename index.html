@@ -10,13 +10,36 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1f2937;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.8);
+            --border-color: #e5e7eb;
+            --primary-color: #3b82f6;
+        }
+        
+        html.dark {
+            --bg-color: #111827;
+            --text-color: #d1d5db;
+            --card-bg: #1f2937;
+            --header-bg: rgba(31, 41, 55, 0.8);
+            --border-color: #374151;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
-        /* Custom scrollbar */
+        
+        .bg-card { background-color: var(--card-bg); }
+        .border-custom { border-color: var(--border-color); }
+        
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
+        html.dark ::-webkit-scrollbar-track { background: #2d3748; }
         ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
         
@@ -27,55 +50,61 @@
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .tab-btn.active { border-bottom-color: #3b82f6; color: #3b82f6; font-weight: 600; }
+        .tab-btn.active { border-bottom-color: var(--primary-color); color: var(--primary-color); font-weight: 600; }
         
-        .calculator-card { background-color: #f3f4f6; border-left: 5px solid #3b82f6; padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem; }
+        .calculator-card { background-color: #f3f4f6; border-left: 5px solid var(--primary-color); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem; }
+        html.dark .calculator-card { background-color: #374151; }
         
         .favorite-btn { cursor: pointer; opacity: 0.6; transition: all 0.2s; }
         .favorite-btn:hover { opacity: 1; transform: scale(1.1); }
         .favorite-btn.saved { color: #facc15; opacity: 1; }
 
-        .highlight { background-color: #fef08a; border-radius: 3px; }
+        .highlight { background-color: #fef08a; border-radius: 3px; color: #1f2937; }
 
         #favorites-panel { transition: transform 0.3s ease-in-out; }
+        html.dark #favorites-panel, html.dark #mobile-menu { background-color: #1f2937; }
     </style>
 </head>
 
 <body class="text-gray-800">
 
-    <header class="bg-white/80 backdrop-blur-lg shadow-md sticky top-0 z-50">
+    <header class="bg-header-bg backdrop-blur-lg shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
                 <a href="#inicio" class="text-xl font-bold text-blue-600">Guía Hemo-Onco Notti</a>
                 <div class="hidden md:flex items-center space-x-4">
                     <div class="relative">
-                        <input type="search" id="global-search-input" placeholder="Buscar en la guía..." class="pl-8 pr-3 py-1.5 border border-gray-300 rounded-full text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="search" id="global-search-input" placeholder="Buscar en la guía..." class="pl-8 pr-3 py-1.5 border border-gray-300 rounded-full text-sm focus:ring-blue-500 focus:border-blue-500 bg-card text-color">
                         <svg class="w-4 h-4 text-gray-400 absolute top-1/2 left-3 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <a href="#debut-leucemico" class="text-gray-600 hover:text-blue-600">Leucemia</a>
-                    <a href="#neutropenia-febril" class="text-gray-600 hover:text-blue-600">N. Febril</a>
-                    <a href="#lisis-tumoral" class="text-gray-600 hover:text-blue-600">SLT</a>
-                    <a href="#hemoderivados" class="text-gray-600 hover:text-blue-600">Hemoderivados</a>
-                    <a href="#anemia" class="text-gray-600 hover:text-blue-600">Anemia</a>
-                    <a href="#purpura" class="text-gray-600 hover:text-blue-600">Púrpura</a>
+                    <a href="#debut-leucemico" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Leucemia</a>
+                    <a href="#neutropenia-febril" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">N. Febril</a>
+                    <a href="#lisis-tumoral" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">SLT</a>
+                    <a href="#hemoderivados" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Hemoderivados</a>
+                    <a href="#anemia" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Anemia</a>
+                    <a href="#purpura" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Púrpura</a>
                 </div>
                 <div class="flex items-center">
-                    <button id="favorites-toggle-btn" class="text-gray-600 hover:text-yellow-500 mr-4">
+                    <button id="theme-toggle" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 mr-4">
+                        <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </button>
+                    <button id="favorites-toggle-btn" class="text-gray-600 hover:text-yellow-500 dark:text-gray-300 dark:hover:text-yellow-400 mr-4">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </button>
-                    <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                    <button id="mobile-menu-button" class="md:hidden text-gray-700 dark:text-gray-300 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     </button>
                 </div>
             </div>
             <div id="mobile-menu" class="hidden md:hidden mt-3">
-                 <div class="relative my-2"><input type="search" id="global-search-input-mobile" placeholder="Buscar..." class="w-full pl-8 pr-3 py-1.5 border rounded-full text-sm"> <svg class="w-4 h-4 text-gray-400 absolute top-1/2 left-3 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                <a href="#debut-leucemico" class="block py-2 text-gray-600 hover:text-blue-600">Debut Leucémico</a>
-                <a href="#neutropenia-febril" class="block py-2 text-gray-600 hover:text-blue-600">Neutropenia Febril</a>
-                <a href="#lisis-tumoral" class="block py-2 text-gray-600 hover:text-blue-600">Síndrome de Lisis Tumoral</a>
-                <a href="#hemoderivados" class="block py-2 text-gray-600 hover:text-blue-600">Hemoderivados</a>
-                <a href="#anemia" class="block py-2 text-gray-600 hover:text-blue-600">Anemia</a>
-                <a href="#purpura" class="block py-2 text-gray-600 hover:text-blue-600">Púrpura</a>
+                 <div class="relative my-2"><input type="search" id="global-search-input-mobile" placeholder="Buscar..." class="w-full pl-8 pr-3 py-1.5 border rounded-full text-sm bg-card text-color"> <svg class="w-4 h-4 text-gray-400 absolute top-1/2 left-3 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                <a href="#debut-leucemico" class="block py-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Debut Leucémico</a>
+                <a href="#neutropenia-febril" class="block py-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Neutropenia Febril</a>
+                <a href="#lisis-tumoral" class="block py-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Síndrome de Lisis Tumoral</a>
+                <a href="#hemoderivados" class="block py-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Hemoderivados</a>
+                <a href="#anemia" class="block py-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Anemia</a>
+                <a href="#purpura" class="block py-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">Púrpura</a>
             </div>
         </nav>
     </header>
@@ -93,32 +122,33 @@
     <main id="main-content" class="container mx-auto p-4 md:p-8">
 
         <section id="inicio" class="text-center pt-16 pb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Guía de Práctica Clínica: Hematología y Oncología</h1>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">Guía de Práctica Clínica: Hematología y Oncología</h1>
             <h2 class="text-2xl md:text-3xl font-semibold text-blue-600 mb-6">Hospital Pediátrico Notti</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                <a href="#debut-leucemico" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700">Debut Leucémico</h3></a>
-                <a href="#neutropenia-febril" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700">Neutropenia Febril</h3></a>
-                <a href="#lisis-tumoral" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700">Síndrome de Lisis Tumoral</h3></a>
-                <a href="#hemoderivados" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700">Hemoderivados</h3></a>
-                <a href="#anemia" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700">Anemia</h3></a>
-                <a href="#purpura" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700">Púrpura y PTI</h3></a>
+                <a href="#debut-leucemico" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Debut Leucémico</h3></a>
+                <a href="#neutropenia-febril" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Neutropenia Febril</h3></a>
+                <a href="#lisis-tumoral" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Síndrome de Lisis Tumoral</h3></a>
+                <a href="#hemoderivados" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Hemoderivados</h3></a>
+                <a href="#anemia" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Anemia</h3></a>
+                <a href="#purpura" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Púrpura y PTI</h3></a>
+                 <a href="#enterocolitis" class="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"><h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400">Enterocolitis Neutropénica</h3></a>
             </div>
         </section>
 
         <section id="debut-leucemico" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
+            <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
                     <span>Debut Leucémico</span>
                     <span class="favorite-btn" data-id="debut-leucemico" data-title="Debut Leucémico">★</span>
                 </h2>
                  <div class="space-y-6">
                     <p>La leucemia es el cáncer más frecuente en la infancia, representando el 30% de las enfermedades malignas en pediatría. El 80% corresponde a Leucemia Linfoblástica Aguda (LLA) y 17% a Leucemia Mieloide Aguda (LMA).</p>
-                    <details class="bg-gray-50 p-4 rounded-lg">
-                        <summary class="font-semibold text-lg text-blue-800">Presentación Clínica y Signos de Alerta</summary>
+                    <details class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <summary class="font-semibold text-lg text-blue-800 dark:text-blue-400">Presentación Clínica y Signos de Alerta</summary>
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <h4 class="font-bold">Síntomas Clínicos:</h4>
-                                <ul class="list-disc list-inside text-gray-700">
+                                <ul class="list-disc list-inside">
                                     <li>Afectación del estado general</li>
                                     <li>Síndrome anémico (palidez, cansancio)</li>
                                     <li>Diátesis hemorrágica (petequias, hematomas)</li>
@@ -128,7 +158,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold">Laboratorio (Signos de Alerta):</h4>
-                                <ul class="list-disc list-inside text-gray-700">
+                                <ul class="list-disc list-inside">
                                     <li>Anemia normocítica, hiporregenerativa</li>
                                     <li>Trombocitopenia (&lt;100.000/µl)</li>
                                     <li>Leucocitosis o leucopenia con blastos en frotis</li>
@@ -139,7 +169,7 @@
                         </div>
                     </details>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Clasificación de Leucemias Agudas</h3>
+                        <h3 class="text-xl font-semibold mb-2 text-blue-800 dark:text-blue-400">Clasificación de Leucemias Agudas</h3>
                         <img src="https://i.imgur.com/nJbFk8I.png" alt="Clasificación de Leucemias" class="rounded-lg shadow-md border mx-auto">
                         <p class="text-xs text-center text-gray-500 mt-2">Diagrama basado en la clasificación FAB y citogenética.</p>
                     </div>
@@ -148,84 +178,127 @@
         </section>
 
         <section id="neutropenia-febril" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
+            <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
                     <span>Neutropenia Febril (NF)</span>
                     <span class="favorite-btn" data-id="neutropenia-febril" data-title="Neutropenia Febril (NF)">★</span>
                 </h2>
                 
                 <div class="space-y-8">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-4 text-blue-800 flex justify-between items-center">
-                            <span>Algoritmo Interactivo de Tratamiento Inicial</span>
-                             <span class="favorite-btn" data-id="nf-interactivo" data-title="Algoritmo NF Interactivo">★</span>
-                        </h3>
-                        <div class="calculator-card border-blue-500 p-6">
-                            <div id="nf-step-1">
-                                <p class="font-semibold mb-3">Paso 1: ¿El paciente presenta signos de sepsis/shock séptico?</p>
-                                <div class="flex space-x-4">
-                                    <button onclick="handleNfAlgorithm('sepsis_yes')" class="flex-1 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Sí</button>
-                                    <button onclick="handleNfAlgorithm('sepsis_no')" class="flex-1 bg-gray-300 py-2 px-4 rounded hover:bg-gray-400">No</button>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-400 flex justify-between items-center">
+                                <span>Algoritmo de Tratamiento Inicial</span>
+                                <span class="favorite-btn" data-id="nf-interactivo" data-title="Algoritmo NF Interactivo">★</span>
+                            </h3>
+                            <div class="calculator-card border-blue-500 p-6">
+                                <div id="nf-step-1">
+                                    <p class="font-semibold mb-3">Paso 1: ¿Signos de sepsis/shock?</p>
+                                    <div class="flex space-x-4">
+                                        <button onclick="handleNfAlgorithm('sepsis_yes')" class="flex-1 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Sí</button>
+                                        <button onclick="handleNfAlgorithm('sepsis_no')" class="flex-1 bg-gray-300 dark:bg-gray-600 dark:text-white py-2 px-4 rounded hover:bg-gray-400">No</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id="nf-step-2" class="hidden">
-                                <p class="font-semibold mb-3">Paso 2: ¿Cumple con criterios de Neutropenia Febril de Alto Riesgo (NFAR)?</p>
-                                <p class="text-sm text-gray-600 mb-3">(LMA/LLA en recaída, PCR ≥ 90, hipotensión, o QT ≤ 7 días + Plaquetas &lt; 50k)</p>
-                                <div class="flex space-x-4">
-                                    <button onclick="handleNfAlgorithm('nfar_yes')" class="flex-1 bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600">Sí (NFAR)</button>
-                                    <button onclick="handleNfAlgorithm('nfar_no')" class="flex-1 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">No (NFBR)</button>
+                                <div id="nf-step-2" class="hidden">
+                                    <p class="font-semibold mb-3">Paso 2: ¿Criterios de Alto Riesgo (NFAR)?</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">(LMA/recaída, PCR≥90, hipotensión, etc.)</p>
+                                    <div class="flex space-x-4">
+                                        <button onclick="handleNfAlgorithm('nfar_yes')" class="flex-1 bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600">Sí (NFAR)</button>
+                                        <button onclick="handleNfAlgorithm('nfar_no')" class="flex-1 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">No (NFBR)</button>
+                                    </div>
                                 </div>
+                                <div id="nf-result" class="mt-4 p-4 bg-blue-100 dark:bg-blue-900/50 rounded-md text-center hidden"></div>
+                                <button id="nf-reset-btn" onclick="resetNfAlgorithm()" class="mt-4 w-full text-sm text-blue-600 hover:underline hidden">Reiniciar</button>
                             </div>
-                             <div id="nf-result" class="mt-4 p-4 bg-blue-100 rounded-md text-center hidden"></div>
-                             <button id="nf-reset-btn" onclick="resetNfAlgorithm()" class="mt-4 w-full text-sm text-blue-600 hover:underline hidden">Reiniciar</button>
-                             <div class="text-xs text-gray-500 mt-3">
-                                <p><em>Herramienta de decisión basada en Anexo III, Guía Notti 2024.</em></p>
+                        </div>
+                         <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-400 flex justify-between items-center">
+                                <span>Manejo Infección de CVC</span>
+                                 <span class="favorite-btn" data-id="cvc-interactivo" data-title="Algoritmo CVC">★</span>
+                            </h3>
+                            <div class="calculator-card border-blue-500 p-6">
+                                <div id="cvc-step-1">
+                                    <p class="font-semibold mb-3">Paso 1: ¿Infección complicada?</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">(Sepsis, tunelitis, tromboflebitis séptica)</p>
+                                    <div class="flex space-x-4">
+                                        <button onclick="handleCvcAlgorithm('comp_yes')" class="flex-1 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Sí</button>
+                                        <button onclick="handleCvcAlgorithm('comp_no')" class="flex-1 bg-gray-300 dark:bg-gray-600 py-2 px-4 rounded hover:bg-gray-400">No</button>
+                                    </div>
+                                </div>
+                                <div id="cvc-step-2" class="hidden">
+                                    <p class="font-semibold mb-3">Paso 2: Microorganismo aislado</p>
+                                    <select id="cvc-microorganism" class="w-full p-2 border rounded bg-card">
+                                        <option value="s_aureus">S. aureus</option>
+                                        <option value="pseudomonas">Pseudomonas aeruginosa</option>
+                                        <option value="candida">Candida spp.</option>
+                                        <option value="coagulase_neg">S. coagulasa negativo</option>
+                                        <option value="enterococcus">Enterococcus spp.</option>
+                                        <option value="gram_neg">Otro Gram negativo</option>
+                                    </select>
+                                    <button onclick="handleCvcAlgorithm('microbe_selected')" class="mt-4 w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">Ver Recomendación</button>
+                                </div>
+                                <div id="cvc-result" class="mt-4 p-4 bg-blue-100 dark:bg-blue-900/50 rounded-md text-center hidden"></div>
+                                <button id="cvc-reset-btn" onclick="resetCvcAlgorithm()" class="mt-4 w-full text-sm text-blue-600 hover:underline hidden">Reiniciar</button>
                             </div>
                         </div>
                     </div>
 
-                    <div>
-                        <h3 class="text-xl font-semibold mb-4 text-blue-800 flex justify-between items-center">
-                            <span>Central de Dosificación de Antimicrobianos</span>
-                             <span class="favorite-btn" data-id="dosis-nf" data-title="Dosis ATB en NF">★</span>
-                        </h3>
-                        <div class="mb-4">
-                            <input type="text" id="drug-search" placeholder="Buscar antimicrobiano (ej. Cefepime)..." class="w-full p-2 border border-gray-300 rounded-md">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-400 flex justify-between items-center">
+                                <span>Dosis de Antimicrobianos</span>
+                                <span class="favorite-btn" data-id="dosis-nf" data-title="Dosis ATB en NF">★</span>
+                            </h3>
+                            <div class="mb-4">
+                                <input type="text" id="drug-search" placeholder="Buscar antimicrobiano..." class="w-full p-2 border rounded bg-card">
+                            </div>
+                            <div class="overflow-x-auto max-h-72">
+                                <table class="w-full text-left border-collapse" id="drug-table">
+                                    <thead class="bg-gray-100 dark:bg-gray-700 sticky top-0"><tr><th class="p-3 border-custom">Antimicrobiano</th><th class="p-3 border-custom">Dosis Pediátrica</th><th class="p-3 border-custom">Intervalo (hs)</th></tr></thead>
+                                    <tbody>
+                                        <tr class="border-b border-custom"><td>Ceftriaxona</td><td>100 mg/kg/día</td><td>24</td></tr>
+                                        <tr class="border-b border-custom"><td>Ceftazidima</td><td>100-150 mg/kg/día</td><td>6-8</td></tr>
+                                        <tr class="border-b border-custom"><td>Cefotaxima</td><td>100-150 mg/kg/día</td><td>6-8</td></tr>
+                                        <tr class="border-b border-custom"><td>Cefepime</td><td>100 mg/kg/día</td><td>8</td></tr>
+                                        <tr class="border-b border-custom"><td>Piperacilina-Tazobactam</td><td>300 mg/kg/día</td><td>6-8</td></tr>
+                                        <tr class="border-b border-custom"><td>Meropenem</td><td>60 mg/kg/día</td><td>8</td></tr>
+                                        <tr class="border-b border-custom"><td>Imipenem</td><td>40-60 mg/kg/día</td><td>8</td></tr>
+                                        <tr class="border-b border-custom"><td>Aztreonam</td><td>90-120 mg/kg/día</td><td>6-8</td></tr>
+                                        <tr class="border-b border-custom"><td>Vancomicina</td><td>40-60 mg/kg/día</td><td>6</td></tr>
+                                        <tr class="border-b border-custom"><td>Amikacina</td><td>15-20 mg/kg/día</td><td>24</td></tr>
+                                        <tr class="border-b border-custom"><td>Ciprofloxacina</td><td>20-30 mg/kg/día</td><td>12</td></tr>
+                                        <tr class="border-b border-custom"><td>Claritromicina</td><td>15 mg/kg/día</td><td>12</td></tr>
+                                        <tr class="border-b border-custom"><td>Aciclovir</td><td>15-30 mg/kg/día</td><td>8</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="overflow-x-auto max-h-72">
-                            <table class="w-full text-left border-collapse" id="drug-table">
-                                <thead class="bg-gray-100 sticky top-0">
-                                    <tr>
-                                        <th class="p-3 border">Antimicrobiano</th>
-                                        <th class="p-3 border">Dosis Pediátrica</th>
-                                        <th class="p-3 border">Intervalo (hs)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b"><td>Ceftriaxona</td><td>100 mg/kg/día</td><td>24</td></tr>
-                                    <tr class="border-b"><td>Ceftazidima</td><td>100-150 mg/kg/día</td><td>6-8</td></tr>
-                                    <tr class="border-b"><td>Cefotaxima</td><td>100-150 mg/kg/día</td><td>6-8</td></tr>
-                                    <tr class="border-b"><td>Cefepime</td><td>100 mg/kg/día</td><td>8</td></tr>
-                                    <tr class="border-b"><td>Piperacilina-Tazobactam</td><td>300 mg/kg/día</td><td>6-8</td></tr>
-                                    <tr class="border-b"><td>Meropenem</td><td>60 mg/kg/día</td><td>8</td></tr>
-                                    <tr class="border-b"><td>Imipenem</td><td>40-60 mg/kg/día</td><td>8</td></tr>
-                                    <tr class="border-b"><td>Aztreonam</td><td>90-120 mg/kg/día</td><td>6-8</td></tr>
-                                    <tr class="border-b"><td>Vancomicina</td><td>40-60 mg/kg/día</td><td>6</td></tr>
-                                    <tr class="border-b"><td>Amikacina</td><td>15-20 mg/kg/día</td><td>24</td></tr>
-                                    <tr class="border-b"><td>Ciprofloxacina</td><td>20-30 mg/kg/día</td><td>12</td></tr>
-                                    <tr class="border-b"><td>Claritromicina</td><td>15 mg/kg/día</td><td>12</td></tr>
-                                    <tr class="border-b"><td>Aciclovir</td><td>15-30 mg/kg/día</td><td>8</td></tr>
-                                </tbody>
-                            </table>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-400 flex justify-between items-center">
+                                <span>Dosis de Antifúngicos</span>
+                                <span class="favorite-btn" data-id="dosis-antifungicos" data-title="Dosis Antifúngicos">★</span>
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="bg-gray-100 dark:bg-gray-700 sticky top-0"><tr><th class="p-3 border-custom">Antifúngico</th><th class="p-3 border-custom">Dosis Pediátrica</th><th class="p-3 border-custom">Notas</th></tr></thead>
+                                    <tbody>
+                                        <tr class="border-b border-custom"><td>Anfotericina B Liposomal</td><td>3-5 mg/kg/día</td><td>IV, dosis única diaria</td></tr>
+                                        <tr class="border-b border-custom"><td>Voriconazol (≥12a)</td><td>9 mg/kg/dosis x2, luego 8 mg/kg/dosis c/12h</td><td>IV. Monitorear niveles.</td></tr>
+                                        <tr class="border-b border-custom"><td>Voriconazol (<12a)</td><td>9 mg/kg/dosis x2, luego 8 mg/kg/dosis c/8h</td><td>IV. Monitorear niveles.</td></tr>
+                                        <tr class="border-b border-custom"><td>Caspofungina</td><td>DC: 70mg/m², Manto: 50mg/m²/día</td><td>IV. Dosis máx: 70mg/50mg.</td></tr>
+                                         <tr class="border-b border-custom"><td>Fluconazol</td><td>10-12 mg/kg/día</td><td>IV/VO</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
+        
         <section id="lisis-tumoral" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
+            <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
                     <span>Síndrome de Lisis Tumoral (SLT)</span>
                     <span class="favorite-btn" data-id="lisis-tumoral" data-title="Síndrome de Lisis Tumoral">★</span>
                 </h2>
@@ -238,7 +311,7 @@
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label for="slt-tumor-type" class="block text-sm font-medium">Tipo de Tumor</label>
-                                    <select id="slt-tumor-type" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                    <select id="slt-tumor-type" class="mt-1 block w-full p-2 border rounded bg-card">
                                         <option value="bajo">Leucemia Mieloide Crónica</option>
                                         <option value="moderado">LMA (Leucocitos 25-100k)</option>
                                         <option value="alto">Linfoma de Burkitt</option>
@@ -248,14 +321,14 @@
                                 </div>
                                 <div>
                                     <label for="slt-ldh" class="block text-sm font-medium">LDH</label>
-                                    <select id="slt-ldh" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                    <select id="slt-ldh" class="mt-1 block w-full p-2 border rounded bg-card">
                                         <option value="normal">&lt; 2x LSN</option>
                                         <option value="alto">&ge; 2x LSN</option>
                                     </select>
                                 </div>
                              </div>
                              <button onclick="calculateTlsRisk()" class="mt-4 w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Calcular Riesgo</button>
-                             <div id="slt-risk-result" class="mt-4 p-3 bg-red-100 rounded-md text-center hidden"></div>
+                             <div id="slt-risk-result" class="mt-4 p-3 bg-red-100 dark:bg-red-900/50 rounded-md text-center hidden"></div>
                         </div>
                         
                         <div class="calculator-card border-green-500">
@@ -263,15 +336,15 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label for="bsa-weight" class="block text-sm font-medium">Peso (kg)</label>
-                                    <input type="number" id="bsa-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                    <input type="number" id="bsa-weight" class="mt-1 block w-full p-2 border rounded bg-card">
                                 </div>
                                  <div>
                                     <label for="bsa-height" class="block text-sm font-medium">Altura (cm)</label>
-                                    <input type="number" id="bsa-height" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                    <input type="number" id="bsa-height" class="mt-1 block w-full p-2 border rounded bg-card">
                                 </div>
                             </div>
                             <button onclick="calculateBsaAndHydration()" class="mt-4 w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Calcular</button>
-                            <div id="bsa-result" class="mt-4 p-3 bg-green-100 rounded-md text-center hidden"></div>
+                            <div id="bsa-result" class="mt-4 p-3 bg-green-100 dark:bg-green-900/50 rounded-md text-center hidden"></div>
                         </div>
                     </div>
 
@@ -280,25 +353,25 @@
                              <h3 class="text-lg font-semibold mb-3 text-yellow-800 flex justify-between">Calculadora Dosis de Alopurinol <span class="favorite-btn" data-id="calc-alopurinol" data-title="Calculadora Alopurinol">★</span></h3>
                              <div>
                                 <label for="alopurinol-weight" class="block text-sm font-medium">Peso (kg)</label>
-                                <input type="number" id="alopurinol-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                <input type="number" id="alopurinol-weight" class="mt-1 block w-full p-2 border rounded bg-card">
                             </div>
                              <button onclick="calculateAllopurinol()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular Dosis</button>
-                             <div id="alopurinol-result" class="mt-4 p-3 bg-yellow-100 rounded-md text-center hidden"></div>
+                             <div id="alopurinol-result" class="mt-4 p-3 bg-yellow-100 dark:bg-yellow-900/50 rounded-md text-center hidden"></div>
                         </div>
 
                         <div class="calculator-card border-red-500">
                              <h3 class="text-lg font-semibold mb-3 text-red-800 flex justify-between">Calculadora de Hiperkalemia <span class="favorite-btn" data-id="calc-hiperkalemia" data-title="Calculadora Hiperkalemia">★</span></h3>
                              <div>
                                 <label for="kalemia-weight" class="block text-sm font-medium">Peso (kg)</label>
-                                <input type="number" id="kalemia-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                <input type="number" id="kalemia-weight" class="mt-1 block w-full p-2 border rounded bg-card">
                             </div>
                              <button onclick="calculateHyperkalemia()" class="mt-4 w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Calcular Dosis</button>
-                             <div id="kalemia-result" class="mt-4 p-3 bg-red-100 rounded-md hidden"></div>
+                             <div id="kalemia-result" class="mt-4 p-3 bg-red-100 dark:bg-red-900/50 rounded-md hidden"></div>
                         </div>
                     </div>
 
-                    <details class="bg-gray-50 p-4 rounded-lg">
-                        <summary class="font-semibold text-lg text-blue-800">Criterios Diagnósticos (Cairo-Bishop)</summary>
+                    <details class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <summary class="font-semibold text-lg text-blue-800 dark:text-blue-400">Criterios Diagnósticos (Cairo-Bishop)</summary>
                         <div class="mt-4 text-sm">
                             <p class="font-bold">SLT de laboratorio: 2 o más de los siguientes:</p>
                             <ul class="list-disc list-inside ml-4">
@@ -320,39 +393,39 @@
         </section>
 
         <section id="hemoderivados" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
+            <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
                     <span>Guía de Hemoderivados</span>
                     <span class="favorite-btn" data-id="hemoderivados" data-title="Guía de Hemoderivados">★</span>
                 </h2>
                 <div class="space-y-8">
                      <div>
-                        <h3 class="text-xl font-semibold mb-4 text-blue-800 flex justify-between items-center">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-400 flex justify-between items-center">
                             <span>Tabla de Umbrales Plaquetarios</span>
                              <span class="favorite-btn" data-id="tabla-plaquetas" data-title="Tabla de Plaquetas">★</span>
                         </h3>
                         <div class="mb-4">
-                            <input type="text" id="platelet-search" placeholder="Buscar procedimiento (ej. Punción lumbar)..." class="w-full p-2 border border-gray-300 rounded-md">
+                            <input type="text" id="platelet-search" placeholder="Buscar procedimiento (ej. Punción lumbar)..." class="w-full p-2 border rounded bg-card">
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse" id="platelet-table">
-                                <thead class="bg-gray-100">
+                                <thead class="bg-gray-100 dark:bg-gray-700">
                                     <tr>
-                                        <th class="p-3 border">Intervención</th>
-                                        <th class="p-3 border">Umbral de Plaquetas Sugerido</th>
+                                        <th class="p-3 border-custom">Intervención</th>
+                                        <th class="p-3 border-custom">Umbral de Plaquetas Sugerido</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Neurocirugía</td><td class="p-2 border">≥ 100 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Biopsia hepática</td><td class="p-2 border">≥ 50 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Bypass cardiopulmonar</td><td class="p-2 border">≥ 50 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Cirugía mayor en leucemias</td><td class="p-2 border">≥ 50 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Endoscopía digestiva</td><td class="p-2 border">≥ 40 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Colocación de catéter central</td><td class="p-2 border">≥ 40 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Fibrobroncoscopia y lavado broncoalveolar</td><td class="p-2 border">≥ 30 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Biopsia hepática por vía transyugular</td><td class="p-2 border">≥ 30 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Punción lumbar en LMA y otras</td><td class="p-2 border">≥ 25 x 10⁹/L</td></tr>
-                                    <tr class="border-b"><td class="p-2 border font-medium">Punción lumbar en LLA</td><td class="p-2 border">≥ 10 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Neurocirugía</td><td class="p-2 border-custom">≥ 100 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Biopsia hepática</td><td class="p-2 border-custom">≥ 50 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Bypass cardiopulmonar</td><td class="p-2 border-custom">≥ 50 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Cirugía mayor en leucemias</td><td class="p-2 border-custom">≥ 50 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Endoscopía digestiva</td><td class="p-2 border-custom">≥ 40 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Colocación de catéter central</td><td class="p-2 border-custom">≥ 40 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Fibrobroncoscopia y lavado broncoalveolar</td><td class="p-2 border-custom">≥ 30 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Biopsia hepática por vía transyugular</td><td class="p-2 border-custom">≥ 30 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Punción lumbar en LMA y otras</td><td class="p-2 border-custom">≥ 25 x 10⁹/L</td></tr>
+                                    <tr class="border-b border-custom"><td class="p-2 border-custom font-medium">Punción lumbar en LLA</td><td class="p-2 border-custom">≥ 10 x 10⁹/L</td></tr>
                                 </tbody>
                             </table>
                             <p class="text-xs text-gray-500 mt-2">Referencia: Guía Notti, pág. 458, TABLA 2.</p>
@@ -363,7 +436,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="trans-weight" class="block text-sm font-medium">Peso (kg)</label>
-                                <input type="number" id="trans-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                <input type="number" id="trans-weight" class="mt-1 block w-full p-2 border rounded bg-card">
                             </div>
                              <div>
                                 <label class="block text-sm font-medium">Componente</label>
@@ -374,20 +447,20 @@
                             </div>
                         </div>
                         <button onclick="calculateTransfusion()" class="mt-4 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700">Calcular Dosis</button>
-                        <div id="transfusion-result" class="mt-4 p-3 bg-purple-100 rounded-md text-center hidden"></div>
+                        <div id="transfusion-result" class="mt-4 p-3 bg-purple-100 dark:bg-purple-900/50 rounded-md text-center hidden"></div>
                     </div>
                 </div>
             </div>
         </section>
 
          <section id="anemia" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
+            <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
                     <span>Anemia</span>
                     <span class="favorite-btn" data-id="anemia" data-title="Anemia">★</span>
                 </h2>
                 <div class="space-y-8">
-                    <div class="border-b border-gray-200">
+                    <div class="border-b border-custom">
                         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
                             <button class="tab-btn active" data-tab="calculators">Calculadoras</button>
                             <button class="tab-btn" data-tab="differential">Diagnóstico Diferencial</button>
@@ -402,12 +475,12 @@
                              <div class="calculator-card border-yellow-500">
                                 <h3 class="text-lg font-semibold mb-3 text-yellow-800 flex justify-between">Calculadora Dosis de Hierro Parenteral (Ferropénica) <span class="favorite-btn" data-id="calc-hierro" data-title="Calculadora Hierro EV">★</span></h3>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div><label class="text-sm">Peso (kg)</label><input type="number" id="iron-weight" class="mt-1 w-full p-2 border rounded"></div>
-                                    <div><label class="text-sm">Hb Teórica (g/dL)</label><input type="number" id="iron-hb-target" class="mt-1 w-full p-2 border rounded" value="12"></div>
-                                    <div><label class="text-sm">Hb Real (g/dL)</label><input type="number" id="iron-hb-actual" class="mt-1 w-full p-2 border rounded"></div>
+                                    <div><label class="text-sm">Peso (kg)</label><input type="number" id="iron-weight" class="mt-1 w-full p-2 border rounded bg-card"></div>
+                                    <div><label class="text-sm">Hb Teórica (g/dL)</label><input type="number" id="iron-hb-target" class="mt-1 w-full p-2 border rounded bg-card" value="12"></div>
+                                    <div><label class="text-sm">Hb Real (g/dL)</label><input type="number" id="iron-hb-actual" class="mt-1 w-full p-2 border rounded bg-card"></div>
                                 </div>
                                 <button onclick="calculateIronDose()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular</button>
-                                <div id="iron-result" class="mt-4 p-3 bg-yellow-100 rounded-md text-center hidden"></div>
+                                <div id="iron-result" class="mt-4 p-3 bg-yellow-100 dark:bg-yellow-900/50 rounded-md text-center hidden"></div>
                                 <p class="text-xs text-gray-500 mt-2">Fórmula: (Hb teórica - Hb real) x Volemia (80ml/kg) x 3.4 x 1.5 / 100.</p>
                             </div>
                             <div class="calculator-card border-teal-500">
@@ -415,7 +488,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="text-sm">Condición</label>
-                                        <select id="prophylaxis-condition" class="mt-1 w-full p-2 border rounded">
+                                        <select id="prophylaxis-condition" class="mt-1 w-full p-2 border rounded bg-card">
                                             <option value="term">RN de Término</option>
                                             <option value="preterm-1500-2000">RN Pretérmino (1500-2000g)</option>
                                             <option value="preterm-750-1500">RN Pretérmino (750-1500g)</option>
@@ -424,52 +497,51 @@
                                     </div>
                                     <div>
                                         <label class="text-sm">Peso (kg)</label>
-                                        <input type="number" id="prophylaxis-weight" class="mt-1 w-full p-2 border rounded">
+                                        <input type="number" id="prophylaxis-weight" class="mt-1 w-full p-2 border rounded bg-card">
                                     </div>
                                 </div>
                                 <button onclick="calculateIronProphylaxis()" class="mt-4 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600">Calcular Profilaxis</button>
-                                <div id="prophylaxis-result" class="mt-4 p-3 bg-teal-100 rounded-md text-center hidden"></div>
+                                <div id="prophylaxis-result" class="mt-4 p-3 bg-teal-100 dark:bg-teal-900/50 rounded-md text-center hidden"></div>
                             </div>
                         </div>
                     </div>
                     <div id="tab-content-differential" class="tab-content">
                         <h3 class="text-xl font-semibold mb-2">Ayuda Diagnóstica de Anemia Microcítica</h3>
                         <div class="calculator-card border-cyan-500">
-                            <p class="mb-4 text-sm">Ingrese los valores de laboratorio para obtener una orientación diagnóstica basada en la "Tabla 9. Diagnóstico diferencial de anemias microcíticas hipocrómicas" de la guía.</p>
+                            <p class="mb-4 text-sm">Ingrese los valores de laboratorio para obtener una orientación diagnóstica.</p>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                <div><label class="text-sm">Ferremia</label><select id="diff-ferremia" class="mt-1 w-full p-2 border rounded"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
-                                <div><label class="text-sm">Sat. Transferrina</label><select id="diff-saturation" class="mt-1 w-full p-2 border rounded"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
-                                <div><label class="text-sm">Ferritina Sérica</label><select id="diff-ferritin" class="mt-1 w-full p-2 border rounded"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
-                                <div><label class="text-sm">Hb A2</label><select id="diff-hba2" class="mt-1 w-full p-2 border rounded"><option value="N">Normal/Disminuida</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Ferremia</label><select id="diff-ferremia" class="mt-1 w-full p-2 border rounded bg-card"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Sat. Transferrina</label><select id="diff-saturation" class="mt-1 w-full p-2 border rounded bg-card"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Ferritina Sérica</label><select id="diff-ferritin" class="mt-1 w-full p-2 border rounded bg-card"><option value="D">Disminuida</option><option value="N">Normal</option><option value="A">Aumentada</option></select></div>
+                                <div><label class="text-sm">Hb A2</label><select id="diff-hba2" class="mt-1 w-full p-2 border rounded bg-card"><option value="N">Normal/Disminuida</option><option value="A">Aumentada</option></select></div>
                             </div>
                             <button onclick="diagnoseMicrocyticAnemia()" class="mt-4 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Analizar</button>
-                            <div id="differential-result" class="mt-4 p-3 bg-cyan-100 rounded-md text-center hidden"></div>
+                            <div id="differential-result" class="mt-4 p-3 bg-cyan-100 dark:bg-cyan-900/50 rounded-md text-center hidden"></div>
                         </div>
                     </div>
                     <div id="tab-content-micro" class="tab-content">
                         <h3 class="text-xl font-semibold mb-2">Anemia Microcítica</h3>
                         <p>Es la causa más frecuente de anemia en pediatría. El primer diagnóstico a plantear es la <strong>deficiencia de hierro (ferropenia)</strong>.</p>
                         <p class="mt-2"><strong>Otras causas:</strong> Talasemias, anemia de la inflamación, intoxicación por plomo.</p>
-                        <p class="mt-2"><strong>Diagnóstico Diferencial Clave (Ferropenia vs. Talasemia menor):</strong></p>
                         <ul class="list-disc list-inside mt-2">
-                            <li><strong>Ferropenia:</strong> Ferritina ↓, Saturación de Transferrina ↓, ADE ↑. Responde a prueba terapéutica con hierro.</li>
-                            <li><strong>Talasemia:</strong> Ferritina N/↑, Metabolismo del hierro normal. No responde a hierro.</li>
+                            <li><strong>Ferropenia:</strong> Ferritina ↓, Saturación de Transferrina ↓, ADE ↑.</li>
+                            <li><strong>Talasemia:</strong> Ferritina N/↑, Metabolismo del hierro normal.</li>
                         </ul>
                     </div>
                     <div id="tab-content-normo" class="tab-content">
                         <h3 class="text-xl font-semibold mb-2">Anemia Normocítica</h3>
                         <p>Se debe evaluar el recuento de reticulocitos:</p>
                         <ul class="list-disc list-inside mt-2">
-                            <li><strong>Reticulocitos ↑:</strong> Sugiere hemólisis o hemorragia aguda. Solicitar prueba de Coombs para diferenciar causas inmunes vs. no inmunes.</li>
-                            <li><strong>Reticulocitos N/↓:</strong> Sugiere defecto en la producción. Investigar enfermedad sistémica (renal, endocrina), anemia de la inflamación o insuficiencia medular.</li>
+                            <li><strong>Reticulocitos ↑:</strong> Sugiere hemólisis o hemorragia aguda.</li>
+                            <li><strong>Reticulocitos N/↓:</strong> Sugiere defecto en la producción.</li>
                         </ul>
                     </div>
                      <div id="tab-content-macro" class="tab-content">
                         <h3 class="text-xl font-semibold mb-2">Anemia Macrocítica</h3>
-                        <p>Poco frecuente en pediatría. Se divide en:</p>
+                        <p>Poco frecuente. Se divide en:</p>
                          <ul class="list-disc list-inside mt-2">
-                            <li><strong>Megaloblástica:</strong> Causada por deficiencia de ácido fólico (más común en niños) o vitamina B12. Se caracteriza por asincronía madurativa núcleo-citoplasma y neutrófilos hipersegmentados.</li>
-                            <li><strong>No Megaloblástica:</strong> Puede verse en hepatopatías, hipotiroidismo, o insuficiencias medulares.</li>
+                            <li><strong>Megaloblástica:</strong> Deficiencia de ácido fólico o vitamina B12.</li>
+                            <li><strong>No Megaloblástica:</strong> Hepatopatías, hipotiroidismo, etc.</li>
                         </ul>
                     </div>
                 </div>
@@ -477,38 +549,24 @@
         </section>
 
         <section id="purpura" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
+            <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
                     <span>Púrpura y PTI</span>
                     <span class="favorite-btn" data-id="purpura" data-title="Púrpura y PTI">★</span>
                 </h2>
                 <div class="space-y-8">
                      <p>La Púrpura Trombocitopénica Inmune (PTI) es la causa más común de hemorragia adquirida en la infancia. Es un diagnóstico de exclusión caracterizado por trombocitopenia aislada (&lt;100.000/μl).</p>
                     
-                    <details class="bg-gray-50 p-4 rounded-lg">
-                        <summary class="font-semibold text-lg text-blue-800">Diagnóstico de PTI Primaria</summary>
-                        <div class="mt-4">
-                            <h4 class="font-bold">Criterios Requeridos:</h4>
-                             <ul class="list-disc list-inside text-gray-700">
-                                <li>Trombocitopenia (&lt;100.000/µl) aislada en el hemograma.</li>
-                                <li>Ausencia de patología sistémica de base (ej. LES, HIV).</li>
-                                <li>Ausencia de enfermedad infecciosa aguda concomitante (ej. mononucleosis).</li>
-                                <li>Examen físico: Buen estado general, sangrado cutáneo-mucoso, sin visceromegalias significativas.</li>
-                            </ul>
-                            <p class="mt-2 text-sm italic">La punción de médula ósea no es obligatoria y se reserva para casos atípicos.</p>
-                        </div>
-                    </details>
-                    
-                    <div class="calculator-card border-indigo-500">
-                        <h3 class="text-lg font-semibold mb-3 text-indigo-800 flex justify-between">Calculadora de Dosis - Tratamiento de 1ª Línea <span class="favorite-btn" data-id="calc-pti" data-title="Calculadora Dosis PTI">★</span></h3>
+                     <div class="calculator-card border-indigo-500">
+                        <h3 class="text-lg font-semibold mb-3 text-indigo-800 flex justify-between">Calculadora de Dosis - Tratamiento PTI 1ª Línea <span class="favorite-btn" data-id="calc-pti" data-title="Calculadora Dosis PTI">★</span></h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="pti-weight" class="block text-sm font-medium">Peso (kg)</label>
-                                <input type="number" id="pti-weight" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                <input type="number" id="pti-weight" class="mt-1 block w-full p-2 border rounded bg-card">
                             </div>
                              <div>
                                 <label for="pti-treatment" class="block text-sm font-medium">Fármaco</label>
-                                <select id="pti-treatment" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                                <select id="pti-treatment" class="mt-1 block w-full p-2 border rounded bg-card">
                                     <option value="prednisona">Prednisona (4mg/kg/día)</option>
                                     <option value="metilprednisolona">Metilprednisolona (30mg/kg)</option>
                                     <option value="igiv">Inmunoglobulina IV (1g/kg)</option>
@@ -516,423 +574,7 @@
                             </div>
                         </div>
                         <button onclick="calculatePtiDose()" class="mt-4 w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700">Calcular Dosis</button>
-                        <div id="pti-result" class="mt-4 p-3 bg-indigo-100 rounded-md text-center hidden"></div>
+                        <div id="pti-result" class="mt-4 p-3 bg-indigo-100 dark:bg-indigo-900/50 rounded-md text-center hidden"></div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <section id="guia-pdf" class="pt-20 -mt-16">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                 <h2 class="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center">
-                    <span>Guía Completa en PDF</span>
-                     <span class="favorite-btn" data-id="guia-pdf" data-title="Visor PDF Guía Completa">★</span>
-                </h2>
-                 <div class="text-center mb-6">
-                    <p class="mb-4">Para una referencia detallada, consulte el documento original.</p>
-                    <a href="https://drive.google.com/file/d/1yL1qRgwMIV56bgpHFk1Mnbpa0NdwaeXN/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors">Ver Guía en Línea</a>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="container mx-auto px-6 py-4 text-center">
-            <p>&copy; 2024 Guía de Práctica Clínica Interactiva - Hospital Pediátrico Notti.</p>
-            <p class="text-xs text-gray-400 mt-1">Esta herramienta es una ayuda y no reemplaza el juicio clínico profesional.</p>
-        </div>
-    </footer>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- SETUP ---
-        setupMobileMenu();
-        setupFavorites();
-        setupTabs();
-        setupTableFilter('platelet-search', 'platelet-table');
-        setupTableFilter('drug-search', 'drug-table');
-        setupGlobalSearch();
-    });
-
-    // --- MOBILE MENU ---
-    function setupMobileMenu() {
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    }
-    
-    // --- TABS ---
-    function setupTabs() {
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tab = button.dataset.tab;
-                
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                tabContents.forEach(content => {
-                    if (content.id === `tab-content-${tab}`) {
-                        content.classList.add('active');
-                    } else {
-                        content.classList.remove('active');
-                    }
-                });
-            });
-        });
-    }
-
-    // --- ALGORITMO NEUTROPENIA FEBRIL ---
-    function handleNfAlgorithm(decision) {
-        const step1 = document.getElementById('nf-step-1');
-        const step2 = document.getElementById('nf-step-2');
-        const resultDiv = document.getElementById('nf-result');
-        const resetBtn = document.getElementById('nf-reset-btn');
-        let resultHTML = '';
-
-        if (decision === 'sepsis_yes') {
-            resultHTML = `<p class="font-bold text-red-800">Tratamiento Recomendado:</p><p>Carbapenem + Vancomicina (dosis máximas). Considerar aminoglucósido según foco y epidemiología local.</p>`;
-            step1.classList.add('hidden');
-            resultDiv.innerHTML = resultHTML;
-            resultDiv.classList.remove('hidden');
-            resetBtn.classList.remove('hidden');
-        } else if (decision === 'sepsis_no') {
-            step1.classList.add('hidden');
-            step2.classList.remove('hidden');
-        } else if (decision === 'nfar_yes') {
-            resultHTML = `<p class="font-bold text-orange-800">Tratamiento Recomendado (NFAR):</p><p>Monoterapia: Cefepime. <br>Alternativa: Piperacilina/Tazobactam.</p>`;
-            step2.classList.add('hidden');
-            resultDiv.innerHTML = resultHTML;
-            resultDiv.classList.remove('hidden');
-            resetBtn.classList.remove('hidden');
-        } else if (decision === 'nfar_no') {
-            resultHTML = `<p class="font-bold text-green-800">Tratamiento Recomendado (NFBR):</p><p>Monoterapia: Ceftriaxona o Cefotaxima.</p>`;
-            step2.classList.add('hidden');
-            resultDiv.innerHTML = resultHTML;
-            resultDiv.classList.remove('hidden');
-            resetBtn.classList.remove('hidden');
-        }
-    }
-
-    function resetNfAlgorithm() {
-        document.getElementById('nf-step-1').classList.remove('hidden');
-        document.getElementById('nf-step-2').classList.add('hidden');
-        document.getElementById('nf-result').classList.add('hidden');
-        document.getElementById('nf-reset-btn').classList.add('hidden');
-    }
-
-    // --- CALCULADORAS ---
-    function calculateTlsRisk() {
-        const tumorType = document.getElementById('slt-tumor-type').value;
-        const ldh = document.getElementById('slt-ldh').value;
-        const resultDiv = document.getElementById('slt-risk-result');
-        let riskLevel = tumorType;
-
-        if (ldh === 'alto' && riskLevel === 'moderado') riskLevel = 'alto';
-
-        let riskText = '';
-        if (riskLevel === 'alto') riskText = '<span class="font-bold text-red-700">RIESGO ALTO.</span> Considerar Rasburicase e hiperhidratación EV agresiva.';
-        else if (riskLevel === 'moderado') riskText = '<span class="font-bold text-orange-700">RIESGO MODERADO.</span> Iniciar Alopurinol e hiperhidratación EV.';
-        else riskText = '<span class="font-bold text-green-700">RIESGO BAJO.</span> Monitoreo y considerar hidratación oral/EV.';
-        
-        resultDiv.innerHTML = riskText;
-        resultDiv.classList.remove('hidden');
-    }
-
-    function calculateBsaAndHydration() {
-        const weight = parseFloat(document.getElementById('bsa-weight').value);
-        const height = parseFloat(document.getElementById('bsa-height').value);
-        const resultDiv = document.getElementById('bsa-result');
-
-        if (!weight || !height || weight <= 0 || height <= 0) {
-            resultDiv.innerHTML = `<p class="text-red-600">Por favor, ingrese peso y altura válidos.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-
-        if (weight < 10) {
-            const hydration = 200 * weight;
-            resultDiv.innerHTML = `<p>Paciente &lt;10 kg:</p><p class="font-bold">Hidratación: ${hydration.toFixed(0)} ml/día (a 200 ml/kg/día)</p>`;
-        } else {
-            const bsa = Math.sqrt((weight * height) / 3600);
-            const hydration = 3000 * bsa;
-            resultDiv.innerHTML = `<p>SC: <span class="font-bold">${bsa.toFixed(2)} m²</span></p><p>Hidratación SLT: <span class="font-bold">${hydration.toFixed(0)} ml/día</span> (a 3000 ml/m²/día)</p>`;
-        }
-        resultDiv.classList.remove('hidden');
-    }
-
-    function calculateTransfusion() {
-        const weight = parseFloat(document.getElementById('trans-weight').value);
-        const component = document.querySelector('input[name="component"]:checked').value;
-        const resultDiv = document.getElementById('transfusion-result');
-
-        if (!weight || weight <= 0) {
-            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-
-        let resultText = '';
-        if (component === 'rbc') {
-            const dose = 10 * weight;
-            resultText = `Dosis de Glóbulos Rojos: <strong class="text-lg">${dose.toFixed(0)} ml</strong> (a 10 ml/kg).`;
-        } else { // platelets
-            const dose = Math.round(weight / 10);
-            resultText = `Dosis de Plaquetas: <strong class="text-lg">${dose} unidad(es)</strong> (1U cada 10 kg).`;
-        }
-        resultDiv.innerHTML = resultText;
-        resultDiv.classList.remove('hidden');
-    }
-
-    function calculateIronDose() {
-        const weight = parseFloat(document.getElementById('iron-weight').value);
-        const hbTarget = parseFloat(document.getElementById('iron-hb-target').value);
-        const hbActual = parseFloat(document.getElementById('iron-hb-actual').value);
-        const resultDiv = document.getElementById('iron-result');
-
-        if (!weight || !hbTarget || !hbActual || weight <=0 ) {
-            resultDiv.innerHTML = `<p class="text-red-600">Complete todos los campos con valores válidos.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-
-        const volemia = weight * 80; // Volemia estimada 80 ml/kg
-        const ironDeficit = (hbTarget - hbActual) * volemia * 3.4 * 1.5 / 100;
-
-        resultDiv.innerHTML = `Dosis total de Hierro a reponer: <strong class="text-lg">${ironDeficit.toFixed(0)} mg</strong>`;
-        resultDiv.classList.remove('hidden');
-    }
-    
-    function calculatePtiDose() {
-        const weight = parseFloat(document.getElementById('pti-weight').value);
-        const treatment = document.getElementById('pti-treatment').value;
-        const resultDiv = document.getElementById('pti-result');
-
-        if (!weight || weight <= 0) {
-            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-        
-        let doseText = '';
-        if (treatment === 'prednisona') {
-            let dose = 4 * weight;
-            dose = Math.min(dose, 180); // Dosis máxima 180mg
-            doseText = `Prednisona: <strong>${dose.toFixed(1)} mg/día</strong> por 4 días.`;
-        } else if (treatment === 'metilprednisolona') {
-            let dose = 30 * weight;
-            dose = Math.min(dose, 1000); // Dosis máxima 1g
-            doseText = `Metilprednisolona: <strong>${dose.toFixed(0)} mg/dosis</strong> por 3 dosis.`;
-        } else if (treatment === 'igiv') {
-            let dose = 1 * weight;
-            doseText = `Inmunoglobulina IV: <strong>${dose.toFixed(1)} g/día</strong> por 1 o 2 días.`;
-        }
-        resultDiv.innerHTML = doseText;
-        resultDiv.classList.remove('hidden');
-    }
-
-    function calculateAllopurinol() {
-        const weight = parseFloat(document.getElementById('alopurinol-weight').value);
-        const resultDiv = document.getElementById('alopurinol-result');
-        if (!weight || weight <= 0) {
-            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-        const dose = 10 * weight;
-        resultDiv.innerHTML = `Dosis diaria total: <strong class="text-lg">${dose.toFixed(0)} mg</strong><p class="text-sm">(Administrar en 3 tomas, c/8hs)</p>`;
-        resultDiv.classList.remove('hidden');
-    }
-
-    function calculateHyperkalemia() {
-        const weight = parseFloat(document.getElementById('kalemia-weight').value);
-        const resultDiv = document.getElementById('kalemia-result');
-        if (!weight || weight <= 0) {
-            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-        const gluconate = (1.5 * weight).toFixed(1);
-        const glucose = (0.75 * weight).toFixed(1);
-        const insulin = (0.075 * weight).toFixed(2);
-        const bicarbonate = (1.5 * weight).toFixed(1);
-
-        resultDiv.innerHTML = `
-            <p><strong class="text-blue-700">Gluconato de Calcio 10%:</strong> ${gluconate} ml (1-2 ml/kg)</p>
-            <p><strong class="text-blue-700">Sol. Glucosa + Insulina:</strong> ${glucose} g de Glucosa + ${insulin} U de Insulina</p>
-            <p><strong class="text-blue-700">Bicarbonato de Sodio (NaHCO3):</strong> ${bicarbonate} mEq (1-2 mEq/kg)</p>
-            <p class="mt-2 text-xs">Considerar Salbutamol NBZ. Dosis basadas en la guía de referencia.</p>
-        `;
-        resultDiv.classList.remove('hidden');
-    }
-
-    function calculateIronProphylaxis() {
-        const weight = parseFloat(document.getElementById('prophylaxis-weight').value);
-        const condition = document.getElementById('prophylaxis-condition').value;
-        const resultDiv = document.getElementById('prophylaxis-result');
-        if (!weight || weight <= 0) {
-            resultDiv.innerHTML = `<p class="text-red-600">Ingrese un peso válido.</p>`;
-            resultDiv.classList.remove('hidden');
-            return;
-        }
-        let doseMultiplier = 1;
-        if (condition === 'preterm-1500-2000') doseMultiplier = 2;
-        else if (condition === 'preterm-750-1500') doseMultiplier = 3.5; // Average of 3-4
-        else if (condition === 'preterm-lt-750') doseMultiplier = 5.5; // Average of 5-6
-
-        const dose = (doseMultiplier * weight).toFixed(1);
-        resultDiv.innerHTML = `Dosis de Hierro elemental: <strong class="text-lg">${dose} mg/día</strong>`;
-        resultDiv.classList.remove('hidden');
-    }
-    
-    function diagnoseMicrocyticAnemia() {
-        const ferremia = document.getElementById('diff-ferremia').value;
-        const saturation = document.getElementById('diff-saturation').value;
-        const ferritin = document.getElementById('diff-ferritin').value;
-        const hba2 = document.getElementById('diff-hba2').value;
-        const resultDiv = document.getElementById('differential-result');
-        
-        let diagnosis = '<span class="font-bold text-gray-700">Patrón no concluyente.</span> Revise los valores o considere otras patologías.';
-
-        if (ferremia === 'D' && saturation === 'D' && ferritin === 'D') {
-            diagnosis = '<span class="font-bold text-green-700">Orientación: Anemia Ferropénica.</span>';
-        } else if (ferremia === 'N' && saturation === 'N' && ferritin === 'N' && hba2 === 'A') {
-            diagnosis = '<span class="font-bold text-blue-700">Orientación: Beta Talasemia Heterocigota.</span>';
-        } else if (ferremia === 'D' && saturation === 'D' && ferritin === 'A') {
-            diagnosis = '<span class="font-bold text-orange-700">Orientación: Anemia de la Inflamación.</span>';
-        } else if (ferremia === 'A' && saturation === 'A' && ferritin === 'A') {
-            diagnosis = '<span class="font-bold text-purple-700">Orientación: Anemia Sideroblástica.</span>';
-        }
-
-        resultDiv.innerHTML = diagnosis;
-        resultDiv.classList.remove('hidden');
-    }
-
-
-    // --- TABLE FILTERING ---
-    function setupTableFilter(inputId, tableId) {
-        document.getElementById(inputId).addEventListener('keyup', function() {
-            const filter = this.value.toUpperCase();
-            const table = document.getElementById(tableId);
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-            for (let i = 0; i < rows.length; i++) {
-                let cell = rows[i].getElementsByTagName('td')[0];
-                if (cell) {
-                    if (cell.textContent.toUpperCase().indexOf(filter) > -1) {
-                        rows[i].style.display = "";
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            }
-        });
-    }
-
-    // --- FAVORITES ---
-    function setupFavorites() {
-        const favoritesToggleBtn = document.getElementById('favorites-toggle-btn');
-        const closeFavoritesBtn = document.getElementById('close-favorites-btn');
-        const favoritesPanel = document.getElementById('favorites-panel');
-
-        favoritesToggleBtn.addEventListener('click', () => favoritesPanel.classList.remove('translate-x-full'));
-        closeFavoritesBtn.addEventListener('click', () => favoritesPanel.classList.add('translate-x-full'));
-
-        loadFavorites();
-
-        document.querySelectorAll('.favorite-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleFavorite(btn.dataset.id, btn.dataset.title);
-                btn.classList.toggle('saved');
-            });
-        });
-    }
-
-    function getFavorites() { return JSON.parse(localStorage.getItem('hemoncoFavoritesV2')) || []; }
-
-    function saveFavorites(favorites) {
-        localStorage.setItem('hemoncoFavoritesV2', JSON.stringify(favorites));
-        loadFavorites();
-    }
-
-    function toggleFavorite(id, title) {
-        let favorites = getFavorites();
-        const existingIndex = favorites.findIndex(fav => fav.id === id);
-
-        if (existingIndex > -1) favorites.splice(existingIndex, 1);
-        else favorites.push({ id, title });
-        saveFavorites(favorites);
-    }
-
-    function loadFavorites() {
-        const favorites = getFavorites();
-        const listDiv = document.getElementById('favorites-list');
-        const savedIds = favorites.map(f => f.id);
-
-        document.querySelectorAll('.favorite-btn').forEach(btn => {
-             btn.classList.toggle('saved', savedIds.includes(btn.dataset.id));
-        });
-
-        if (favorites.length === 0) {
-            listDiv.innerHTML = `<p class="text-gray-500">Guarde secciones con el ícono de estrella <span class="text-yellow-400">★</span> para verlas aquí.</p>`;
-            return;
-        }
-
-        listDiv.innerHTML = favorites.map(fav => 
-            `<a href="#${fav.id}" class="block p-2 bg-gray-100 rounded hover:bg-blue-100 transition-colors">${fav.title}</a>`
-        ).join('');
-        
-        listDiv.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-            document.getElementById('favorites-panel').classList.add('translate-x-full');
-        }));
-    }
-    
-    // --- GLOBAL SEARCH ---
-    function setupGlobalSearch() {
-        const performSearch = (query) => {
-            removeHighlights();
-            if (query.length < 3) return;
-
-            const mainContent = document.getElementById('main-content');
-            const regex = new RegExp(query, 'gi');
-            
-            // Función para recorrer nodos de texto
-            function findAndHighlight(node) {
-                if (node.nodeType === 3) { // Es un nodo de texto
-                    const matches = node.nodeValue.match(regex);
-                    if (matches) {
-                        const span = document.createElement('span');
-                        span.innerHTML = node.nodeValue.replace(regex, (match) => `<span class="highlight">${match}</span>`);
-                        node.parentNode.replaceChild(span, node);
-                    }
-                } else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
-                    for (let i = 0; i < node.childNodes.length; i++) {
-                        findAndHighlight(node.childNodes[i]);
-                    }
-                }
-            }
-            
-            findAndHighlight(mainContent);
-        };
-
-        const searchInput = document.getElementById('global-search-input');
-        const mobileSearchInput = document.getElementById('global-search-input-mobile');
-        
-        searchInput.addEventListener('input', (e) => performSearch(e.target.value));
-        mobileSearchInput.addEventListener('input', (e) => performSearch(e.target.value));
-    }
-
-    function removeHighlights() {
-        document.querySelectorAll('span.highlight').forEach(el => {
-            const parent = el.parentNode;
-            parent.replaceChild(document.createTextNode(el.textContent), el);
-            parent.normalize(); // Une nodos de texto adyacentes
-        });
-    }
-
-    </script>
-
-</body>
-</html>
+                    <div class="calculator-card border-cyan-500
