@@ -33,6 +33,9 @@
         .favorite-btn { cursor: pointer; opacity: 0.6; transition: all 0.2s; } .favorite-btn:hover { opacity: 1; transform: scale(1.1); } .favorite-btn.saved { color: #facc15; opacity: 1; }
         .highlight { background-color: #fef08a; border-radius: 3px; color: #1f2937; }
         #favorites-panel, #mobile-menu { background-color: var(--card-bg); transition: transform 0.3s ease-in-out; }
+        .info-details summary { font-semibold text-lg text-blue-800 dark:text-blue-400; padding: 0.5rem; background-color: #eef2ff; dark:bg-gray-800; border-radius: 0.5rem; }
+        .info-details[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+        .info-details-content { padding: 1rem; border: 1px solid var(--border-color); border-top: none; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
     </style>
 </head>
 
@@ -120,7 +123,46 @@
             <section id="debut-leucemico" class="pt-20 -mt-20">
                 <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center"><span>Debut Leucémico</span><span class="favorite-btn" data-id="debut-leucemico" data-title="Debut Leucémico">★</span></h2>
-                    <div class="space-y-4"><p class="text-base">La leucemia es el cáncer más frecuente en la infancia (30% de las neoplasias), siendo la <strong>Leucemia Linfoblástica Aguda (LLA)</strong> el 80% de los casos y la <strong>Leucemia Mieloide Aguda (LMA)</strong> el 17%. La presentación clínica suele incluir afectación del estado general, síndrome anémico, diátesis hemorrágica, fiebre y dolor óseo. Los signos de alerta en el laboratorio son la afectación de dos o más series hematológicas, como anemia normocítica hiporregenerativa y trombocitopenia (<100.000/μl), junto con la posible presencia de blastos en sangre periférica, leucocitosis o leucopenia. El diagnóstico requiere >20% de blastos en médula ósea o sangre periférica.</p></div>
+                    <div class="space-y-4">
+                        <p class="text-base">La leucemia es el cáncer más frecuente en la infancia (30% de las neoplasias), siendo la <strong>Leucemia Linfoblástica Aguda (LLA)</strong> el 80% de los casos y la <strong>Leucemia Mieloide Aguda (LMA)</strong> el 17%. La presentación clínica suele incluir afectación del estado general, síndrome anémico, diátesis hemorrágica, fiebre y dolor óseo. Los signos de alerta en el laboratorio son la afectación de dos o más series hematológicas, como anemia normocítica hiporregenerativa y trombocitopenia (<100.000/μl), junto con la posible presencia de blastos en sangre periférica, leucocitosis o leucopenia. El diagnóstico requiere >20% de blastos en médula ósea o sangre periférica.</p>
+                        <details class="info-details mt-6">
+                            <summary>Ver Clasificación y Signos de Alerta</summary>
+                            <div class="info-details-content space-y-4 text-sm">
+                                <h4 class="font-bold text-md">Clasificación de Leucemias</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <strong>Linfoblásticas:</strong>
+                                        <ul class="list-disc list-inside ml-2">
+                                            <li><strong>Células B:</strong> Madura (LB), Inmaduras (Pro-B, Pre-B)</li>
+                                            <li><strong>Células T</strong></li>
+                                            <li><strong>Citogenético-molecular:</strong> BCR-ABL1, MLL-AF4, C-MYC, etc.</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <strong>Mieloblásticas (LMA):</strong>
+                                        <ul class="list-disc list-inside ml-2">
+                                            <li><strong>M0:</strong> Indiferenciada</li>
+                                            <li><strong>M1:</strong> Sin maduración</li>
+                                            <li><strong>M2:</strong> Con maduración</li>
+                                            <li><strong>M3:</strong> Promielocítica</li>
+                                            <li><strong>M4:</strong> Mielomonoblástica</li>
+                                            <li><strong>M5:</strong> Monoblástica</li>
+                                            <li><strong>M6:</strong> Eritroleucemia</li>
+                                            <li><strong>M7:</strong> Megacarioblástica</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h4 class="font-bold text-md mt-4">Signos de Alerta en Laboratorio</h4>
+                                <ul class="list-disc list-inside">
+                                    <li><strong>Anemia:</strong> Hb < 10 g/dl, normocítica, hiporregenerativa.</li>
+                                    <li><strong>Trombocitopenia:</strong> Plaquetas < 100.000/μl.</li>
+                                    <li><strong>Leucocitos:</strong> Leucocitosis (>10.000/μl) o Leucopenia. Neutropenia frecuente.</li>
+                                    <li><strong>Frotis:</strong> Presencia de blastos o células atípicas.</li>
+                                    <li><strong>Afectación de 2 o más series hematológicas.</strong></li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
             </section>
 
@@ -129,13 +171,19 @@
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center"><span>Neutropenia Febril</span><span class="favorite-btn" data-id="neutropenia-febril" data-title="Neutropenia Febril">★</span></h2>
                     <div class="space-y-6">
                          <p class="text-base">La <strong>Neutropenia Febril (NF)</strong> es la complicación infecciosa más frecuente en pacientes oncológicos, definida por un Recuento Absoluto de Neutrófilos (RAN) ≤ 500/mm³ y temperatura axilar ≥ 38.5°C. Es crucial estratificar el riesgo: la <strong>NF de Alto Riesgo (NFAR)</strong> se asocia a LMA, recaída de LLA, hipotensión o PCR ≥ 90 mg/L. El manejo inicial debe ser inmediato, con toma de hemocultivos e inicio de antibioticoterapia empírica en la primera hora. El tratamiento para NFAR suele ser monoterapia con Cefepime o Piperacilina-Tazobactam, mientras que para la <strong>NF de Bajo Riesgo (NFBR)</strong> se puede usar Ceftriaxona.</p>
-                        <details class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-                            <summary class="font-semibold text-lg text-blue-800 dark:text-blue-400">Herramientas Interactivas de NF</summary>
-                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="calculator-card border-blue-500"><h3 class="font-semibold">Algoritmo de Tratamiento Inicial</h3><div id="nf-step-1" class="mt-2"><p class="mb-2 text-sm">Paso 1: ¿Signos de sepsis/shock?</p><div class="flex space-x-4"><button onclick="handleNfAlgorithm('sepsis_yes')" class="flex-1 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Sí</button><button onclick="handleNfAlgorithm('sepsis_no')" class="flex-1 bg-gray-300 dark:bg-gray-600 py-2 px-4 rounded hover:bg-gray-400">No</button></div></div><div id="nf-step-2" class="hidden mt-2"><p class="mb-2 text-sm">Paso 2: ¿Criterios de Alto Riesgo (NFAR)?</p><div class="flex space-x-4"><button onclick="handleNfAlgorithm('nfar_yes')" class="flex-1 bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600">Sí (NFAR)</button><button onclick="handleNfAlgorithm('nfar_no')" class="flex-1 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">No (NFBR)</button></div></div><div id="nf-result" class="mt-4 p-3 bg-blue-100 dark:bg-blue-900/50 rounded-md text-center hidden"></div><button id="nf-reset-btn" onclick="resetNfAlgorithm()" class="mt-4 w-full text-sm text-blue-600 hover:underline hidden">Reiniciar</button></div>
-                                <div class="calculator-card border-cyan-500"><h3 class="font-semibold">Manejo Infección de CVC</h3><div id="cvc-step-1" class="mt-2"><p class="mb-2 text-sm">Paso 1: ¿Infección complicada?</p><div class="flex space-x-4"><button onclick="handleCvcAlgorithm('comp_yes')" class="flex-1 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Sí</button><button onclick="handleCvcAlgorithm('comp_no')" class="flex-1 bg-gray-300 dark:bg-gray-600 py-2 px-4 rounded hover:bg-gray-400">No</button></div></div><div id="cvc-step-2" class="hidden mt-2"><p class="mb-2 text-sm">Paso 2: Microorganismo aislado</p><select id="cvc-microorganism" class="w-full p-2 border rounded input-custom"><option value="s_aureus">S. aureus / Pseudomonas / Candida</option><option value="other">Otro</option></select><button onclick="handleCvcAlgorithm('microbe_selected')" class="mt-3 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Ver</button></div><div id="cvc-result" class="mt-4 p-3 bg-cyan-100 dark:bg-cyan-900/50 rounded-md text-center hidden"></div><button id="cvc-reset-btn" onclick="resetCvcAlgorithm()" class="mt-4 w-full text-sm text-cyan-600 hover:underline hidden">Reiniciar</button></div>
+                        <div class="calculator-card border-blue-500">
+                            <h3 class="font-semibold text-lg mb-2">Estratificador de Riesgo y Tratamiento Inicial</h3>
+                            <div class="space-y-2 text-sm" id="nf-risk-stratification-form">
+                                <label class="flex items-center"><input type="checkbox" name="nf-criteria" value="sepsis" class="mr-2"> Signos de Sepsis / Shock</label>
+                                <label class="flex items-center"><input type="checkbox" name="nf-criteria" value="lma_lla" class="mr-2"> Diagnóstico de LMA o LLA en recaída</label>
+                                <label class="flex items-center"><input type="checkbox" name="nf-criteria" value="hipotension" class="mr-2"> Hipotensión arterial</label>
+                                <label class="flex items-center"><input type="checkbox" name="nf-criteria" value="pcr" class="mr-2"> PCR Cuantitativa ≥ 90 mg/L</label>
+                                <label class="flex items-center"><input type="checkbox" name="nf-criteria" value="days_qt" class="mr-2"> ≤ 7 días desde el último ciclo de quimioterapia</label>
+                                <label class="flex items-center"><input type="checkbox" name="nf-criteria" value="platelets" class="mr-2"> Plaquetas < 50.000/mm³</label>
                             </div>
-                        </details>
+                            <button onclick="stratifyNfRisk()" class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Evaluar Riesgo y Tratamiento</button>
+                            <div id="nf-stratification-result" class="mt-4 p-3 bg-blue-100 dark:bg-blue-900/50 rounded-md text-center hidden"></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -145,6 +193,31 @@
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center"><span>Síndrome de Lisis Tumoral (SLT)</span><span class="favorite-btn" data-id="lisis-tumoral" data-title="Lisis Tumoral">★</span></h2>
                     <div class="space-y-6">
                         <p class="text-base">El <strong>Síndrome de Lisis Tumoral (SLT)</strong> es una emergencia oncológica causada por la destrucción masiva de células malignas, liberando su contenido y provocando <strong>hiperuricemia, hiperkalemia, e hiperfosfatemia</strong>, lo que conduce secundariamente a hipocalcemia y puede causar fallo renal agudo. El diagnóstico de SLT de laboratorio requiere 2 o más de los siguientes: Ácido Úrico ≥ 8 mg/dL, Potasio ≥ 6 mEq/L, o Fósforo ≥ 5 mEq/L. El manejo se basa en la <strong>hiperhidratación agresiva</strong> (3000 mL/m²/día) y el control de la uricemia con <strong>Alopurinol</strong> (riesgo bajo/moderado) o <strong>Rasburicase</strong> (riesgo alto).</p>
+                        <details class="info-details mt-6">
+                            <summary>Ver Fisiopatología y Criterios Diagnósticos</summary>
+                            <div class="info-details-content space-y-4 text-sm">
+                                <h4 class="font-bold text-md">Fisiopatología Simplificada</h4>
+                                <p>La lisis celular masiva libera potasio (K+), fosfato (PO4) y ácidos nucleicos (que se degradan a ácido úrico). El exceso de ácido úrico y fosfato de calcio puede precipitar en los túbulos renales, causando una nefropatía obstructiva que, junto a la deshidratación, lleva a la Insuficiencia Renal Aguda (IRA).</p>
+                                <h4 class="font-bold text-md mt-4">Criterios Diagnósticos (Cairo-Bishop)</h4>
+                                <ul class="list-disc list-inside">
+                                    <li><strong>SLT de Laboratorio (2 o más):</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Ácido Úrico ≥ 8 mg/dL (o aumento del 25% del basal)</li>
+                                            <li>Potasio ≥ 6 mEq/L (o aumento del 25% del basal)</li>
+                                            <li>Fósforo ≥ 5 mEq/L (o aumento del 25% del basal)</li>
+                                            <li>Calcio ≤ 7 mg/dL (o disminución del 25% del basal)</li>
+                                        </ul>
+                                    </li>
+                                    <li class="mt-2"><strong>SLT Clínico:</strong> SLT de Laboratorio más 1 o más de:
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Creatinina > 1.5 veces el límite superior normal.</li>
+                                            <li>Arritmia cardíaca o muerte súbita.</li>
+                                            <li>Convulsiones.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </details>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="calculator-card border-red-500"><h3 class="font-semibold">Calculadora de Riesgo de SLT</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"><div><label class="text-sm">Tipo de Tumor</label><select id="slt-tumor-type" class="mt-1 block w-full p-2 border rounded input-custom"><option value="bajo">LMC</option><option value="moderado">LMA (25-100k)</option><option value="alto">Burkitt / LLA (≥100k)</option></select></div><div><label class="text-sm">LDH</label><select id="slt-ldh" class="mt-1 block w-full p-2 border rounded input-custom"><option value="normal">&lt; 2x LSN</option><option value="alto">≥ 2x LSN</option></select></div></div><button onclick="calculateTlsRisk()" class="mt-4 w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700">Calcular Riesgo</button><div id="slt-risk-result" class="mt-3 p-3 bg-red-100 dark:bg-red-900/50 rounded-md text-center hidden"></div></div>
                             <div class="calculator-card border-green-500"><h3 class="font-semibold">Calculadora de Hidratación</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"><div><label class="text-sm">Peso (kg)</label><input type="number" id="bsa-weight" class="mt-1 block w-full p-2 border rounded input-custom"></div><div><label class="text-sm">Altura (cm)</label><input type="number" id="bsa-height" class="mt-1 block w-full p-2 border rounded input-custom"></div></div><button onclick="calculateBsaAndHydration()" class="mt-4 w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Calcular</button><div id="bsa-result" class="mt-3 p-3 bg-green-100 dark:bg-green-900/50 rounded-md text-center hidden"></div></div>
@@ -159,14 +232,28 @@
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-blue-500 pb-3 mb-6 flex justify-between items-center"><span>Anemia</span><span class="favorite-btn" data-id="anemia" data-title="Anemia">★</span></h2>
                     <div class="space-y-6">
                         <p class="text-base">La <strong>Anemia</strong> se define como un nivel de hemoglobina por debajo de los valores de referencia para la edad y el sexo. En pediatría, la causa más frecuente a nivel mundial es la <strong>deficiencia de hierro (anemia ferropénica)</strong>, especialmente entre los 6 y 24 meses. Se clasifica morfológicamente según el VCM en <strong>microcítica</strong> (ferropenia, talasemias), <strong>normocítica</strong> (hemólisis, hemorragia aguda, enfermedad crónica) y <strong>macrocítica</strong> (déficit de ácido fólico/B12). La evaluación inicial se basa en el hemograma y los índices hematimétricos para orientar el diagnóstico.</p>
-                        <details class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-                            <summary class="font-semibold text-lg text-blue-800 dark:text-blue-400">Herramientas para Anemia</summary>
-                            <div class="mt-4 space-y-6">
-                                <div class="calculator-card border-yellow-500"><h3 class="font-semibold">Dosis Hierro Parenteral</h3><div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2"><div><label class="text-sm">Peso (kg)</label><input type="number" id="iron-weight" class="mt-1 w-full p-2 border rounded input-custom"></div><div><label class="text-sm">Hb Teórica</label><input type="number" id="iron-hb-target" class="mt-1 w-full p-2 border rounded input-custom" value="12"></div><div><label class="text-sm">Hb Real</label><input type="number" id="iron-hb-actual" class="mt-1 w-full p-2 border rounded input-custom"></div></div><button onclick="calculateIronDose()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular</button><div id="iron-result" class="mt-3 p-3 bg-yellow-100 dark:bg-yellow-900/50 rounded-md text-center hidden"></div></div>
-                                <div class="calculator-card border-teal-500"><h3 class="font-semibold">Profilaxis de Hierro en Lactantes</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2"><div><label class="text-sm">Condición</label><select id="prophylaxis-condition" class="mt-1 w-full p-2 border rounded input-custom"><option value="term">RN Término</option><option value="preterm-1500-2000">RN Pretérmino (1.5-2kg)</option><option value="preterm-750-1500">RN Pretérmino (0.75-1.5kg)</option><option value="preterm-lt-750">RN Pretérmino (&lt;0.75kg)</option></select></div><div><label class="text-sm">Peso (kg)</label><input type="number" id="prophylaxis-weight" class="mt-1 w-full p-2 border rounded input-custom"></div></div><button onclick="calculateIronProphylaxis()" class="mt-4 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600">Calcular</button><div id="prophylaxis-result" class="mt-3 p-3 bg-teal-100 dark:bg-teal-900/50 rounded-md text-center hidden"></div></div>
-                                <div class="calculator-card border-cyan-500"><h3 class="font-semibold">Ayuda Dx Anemia Microcítica</h3><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm"><div><label>Ferremia</label><select id="diff-ferremia" class="mt-1 w-full p-2 border rounded input-custom"><option value="D">Baja</option><option value="N">Normal</option><option value="A">Alta</option></select></div><div><label>Sat. Transferrina</label><select id="diff-saturation" class="mt-1 w-full p-2 border rounded input-custom"><option value="D">Baja</option><option value="N">Normal</option><option value="A">Alta</option></select></div><div><label>Ferritina</label><select id="diff-ferritin" class="mt-1 w-full p-2 border rounded input-custom"><option value="D">Baja</option><option value="N">Normal</option><option value="A">Alta</option></select></div><div><label>Hb A2</label><select id="diff-hba2" class="mt-1 w-full p-2 border rounded input-custom"><option value="N">Normal/Baja</option><option value="A">Alta</option></select></div></div><button onclick="diagnoseMicrocyticAnemia()" class="mt-4 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Analizar</button><div id="differential-result" class="mt-3 p-3 bg-cyan-100 dark:bg-cyan-900/50 rounded-md text-center hidden"></div></div>
+                        <details class="info-details mt-6">
+                            <summary>Ver Clasificaciones de Anemia</summary>
+                            <div class="info-details-content space-y-4 text-sm">
+                                <h4 class="font-bold text-md">Clasificación Morfológica (según VCM)</h4>
+                                <ul class="list-disc list-inside">
+                                    <li><strong>Microcíticas:</strong> Ferropenia, Talasemias, Anemia de la inflamación.</li>
+                                    <li><strong>Normocíticas:</strong> Anemias hemolíticas, Hemorragia aguda, Hiperesplenismo.</li>
+                                    <li><strong>Macrocíticas:</strong> Megaloblásticas (déficit fólico/B12), No megaloblásticas (insuficiencia medular).</li>
+                                </ul>
+                                <h4 class="font-bold text-md mt-4">Clasificación Fisiopatológica</h4>
+                                <ul class="list-disc list-inside">
+                                    <li><strong>Trastornos de producción:</strong> Insuficiencia medular (congénita/adquirida), Eritropoyesis inefectiva.</li>
+                                    <li><strong>Aumento de la destrucción (hemólisis):</strong> Trastornos de hemoglobina, de membrana, enzimáticos, inmunes.</li>
+                                    <li><strong>Pérdidas:</strong> Hemorragia aguda o crónica.</li>
+                                </ul>
                             </div>
                         </details>
+                        <div class="mt-4 space-y-6">
+                            <div class="calculator-card border-yellow-500"><h3 class="font-semibold">Dosis Hierro Parenteral</h3><div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2"><div><label class="text-sm">Peso (kg)</label><input type="number" id="iron-weight" class="mt-1 w-full p-2 border rounded input-custom"></div><div><label class="text-sm">Hb Teórica</label><input type="number" id="iron-hb-target" class="mt-1 w-full p-2 border rounded input-custom" value="12"></div><div><label class="text-sm">Hb Real</label><input type="number" id="iron-hb-actual" class="mt-1 w-full p-2 border rounded input-custom"></div></div><button onclick="calculateIronDose()" class="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600">Calcular</button><div id="iron-result" class="mt-3 p-3 bg-yellow-100 dark:bg-yellow-900/50 rounded-md text-center hidden"></div></div>
+                            <div class="calculator-card border-teal-500"><h3 class="font-semibold">Profilaxis de Hierro en Lactantes</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2"><div><label class="text-sm">Condición</label><select id="prophylaxis-condition" class="mt-1 w-full p-2 border rounded input-custom"><option value="term">RN Término</option><option value="preterm-1500-2000">RN Pretérmino (1.5-2kg)</option><option value="preterm-750-1500">RN Pretérmino (0.75-1.5kg)</option><option value="preterm-lt-750">RN Pretérmino (&lt;0.75kg)</option></select></div><div><label class="text-sm">Peso (kg)</label><input type="number" id="prophylaxis-weight" class="mt-1 w-full p-2 border rounded input-custom"></div></div><button onclick="calculateIronProphylaxis()" class="mt-4 w-full bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600">Calcular</button><div id="prophylaxis-result" class="mt-3 p-3 bg-teal-100 dark:bg-teal-900/50 rounded-md text-center hidden"></div></div>
+                            <div class="calculator-card border-cyan-500"><h3 class="font-semibold">Ayuda Dx Anemia Microcítica</h3><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm"><div><label>Ferremia</label><select id="diff-ferremia" class="mt-1 w-full p-2 border rounded input-custom"><option value="D">Baja</option><option value="N">Normal</option><option value="A">Alta</option></select></div><div><label>Sat. Transferrina</label><select id="diff-saturation" class="mt-1 w-full p-2 border rounded input-custom"><option value="D">Baja</option><option value="N">Normal</option><option value="A">Alta</option></select></div><div><label>Ferritina</label><select id="diff-ferritin" class="mt-1 w-full p-2 border rounded input-custom"><option value="D">Baja</option><option value="N">Normal</option><option value="A">Alta</option></select></div><div><label>Hb A2</label><select id="diff-hba2" class="mt-1 w-full p-2 border rounded input-custom"><option value="N">Normal/Baja</option><option value="A">Alta</option></select></div></div><button onclick="diagnoseMicrocyticAnemia()" class="mt-4 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Analizar</button><div id="differential-result" class="mt-3 p-3 bg-cyan-100 dark:bg-cyan-900/50 rounded-md text-center hidden"></div></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -178,7 +265,7 @@
                         <p class="text-base">La <strong>Púrpura Trombocitopénica Inmune (PTI)</strong> es la causa más común de sangrado adquirido en niños, caracterizada por trombocitopenia aislada (<100.000/μl) mediada por anticuerpos. Generalmente es un cuadro agudo y autolimitado, a menudo precedido por una infección viral. El diagnóstico es de exclusión, en un niño con buen estado general que presenta petequias y hematomas, sin hepatoesplenomegalia. El tratamiento de primera línea, si es necesario (plaquetas < 20.000/μl o sangrado significativo), incluye <strong>Corticoides</strong> o <strong>Inmunoglobulina IV</strong>.</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="calculator-card border-indigo-500"><h3 class="font-semibold">Tratamiento PTI 1ª Línea</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2"><div><label class="text-sm">Peso (kg)</label><input type="number" id="pti-weight" class="mt-1 block w-full p-2 border rounded input-custom"></div><div><label class="text-sm">Fármaco</label><select id="pti-treatment" class="mt-1 block w-full p-2 border rounded input-custom"><option value="prednisona">Prednisona</option><option value="metilprednisolona">Metilprednisolona</option><option value="igiv">Ig IV</option></select></div></div><button onclick="calculatePtiDose()" class="mt-4 w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700">Calcular Dosis</button><div id="pti-result" class="mt-3 p-3 bg-indigo-100 dark:bg-indigo-900/50 rounded-md text-center hidden"></div></div>
-                            <div class="calculator-card border-cyan-500"><h3 class="font-semibold">Infusión de Gammaglobulina</h3><div class="mt-2"><label class="text-sm">Peso (kg)</label><input type="number" id="igiv-weight" class="mt-1 block w-full p-2 border rounded input-custom"></div><button onclick="calculateIgivInfusion()" class="mt-4 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Generar Plan</button><div id="igiv-result" class="mt-3 p-3 bg-cyan-100 dark:bg-cyan-900/50 rounded-md hidden"></div></div>
+                            <div class="calculator-card border-cyan-500"><h3 class="font-semibold">Plan de Infusión de Gammaglobulina</h3><div class="mt-2"><label class="text-sm">Peso (kg)</label><input type="number" id="igiv-weight" class="mt-1 block w-full p-2 border rounded input-custom"></div><button onclick="calculateIgivInfusion()" class="mt-4 w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded hover:bg-cyan-700">Generar Plan</button><div id="igiv-result" class="mt-3 p-3 bg-cyan-100 dark:bg-cyan-900/50 rounded-md hidden"></div></div>
                         </div>
                     </div>
                 </div>
@@ -199,6 +286,7 @@
                     <div class="space-y-4">
                         <p class="text-base">La terapia transfusional busca reponer componentes sanguíneos específicos. La transfusión de <strong>Concentrados de Glóbulos Rojos (CGR)</strong> está indicada para mejorar el transporte de oxígeno, generalmente con un umbral de Hb < 7 g/dL en pacientes estables. La transfusión de <strong>Concentrados de Plaquetas (CP)</strong> se indica de forma profiláctica con recuentos < 10.000/μl en pacientes con insuficiencia medular o ante procedimientos invasivos con umbrales específicos (ej. >50.000/μl para cirugía mayor). La dosis habitual es 10-15 ml/kg para CGR y 1 unidad cada 10 kg para CP.</p>
                         <div class="calculator-card border-purple-500"><h3 class="font-semibold">Calculadora de Dosis de Transfusión</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"><div><label class="text-sm">Peso (kg)</label><input type="number" id="trans-weight" class="mt-1 block w-full p-2 border rounded input-custom"></div><div><label class="text-sm">Componente</label><div class="mt-2 space-x-4"><label><input type="radio" name="component" value="rbc" checked> GR</label><label><input type="radio" name="component" value="platelets"> Plaquetas</label></div></div></div><button onclick="calculateTransfusion()" class="mt-4 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700">Calcular Dosis</button><div id="transfusion-result" class="mt-3 p-3 bg-purple-100 dark:bg-purple-900/50 rounded-md text-center hidden"></div></div>
+                        <div class="calculator-card border-rose-500 mt-6"><h3 class="font-semibold">Guía de Transfusión por Procedimiento</h3><div class="mt-2"><div><label class="text-sm">Seleccione el Procedimiento</label><select id="procedure-select" class="mt-1 block w-full p-2 border rounded input-custom"></select></div></div><button onclick="getPlateletThreshold()" class="mt-4 w-full bg-rose-600 text-white font-bold py-2 px-4 rounded hover:bg-rose-700">Ver Umbral de Plaquetas</button><div id="procedure-result" class="mt-3 p-3 bg-rose-100 dark:bg-rose-900/50 rounded-md text-center hidden"></div></div>
                     </div>
                 </div>
             </section>
@@ -220,10 +308,10 @@
         setupTheme();
         setupMobileMenu();
         setupFavorites();
-        setupTabs();
         setupGlobalSearch();
         setupDrugCalculator();
         attachCalculatorFunctions(); // Carga todas las funciones de las calculadoras
+        populateProcedureSelect(); // NUEVO: Carga los procedimientos en el select
     });
 
     // --- BASE DE DATOS DE FÁRMACOS ---
@@ -239,6 +327,20 @@
         caspofungina: { name: 'Caspofungina', group: 'Antifúngicos', requiresHeight: true, dose: (w, h) => { const bsa = Math.sqrt((w*h)/3600); return `SC: <strong>${bsa.toFixed(2)} m²</strong><br>Dosis Carga: <strong>${Math.min(70, 70*bsa).toFixed(0)} mg</strong>.<br>Mantenimiento: <strong>${Math.min(50, 50*bsa).toFixed(0)} mg/día</strong>.` }, calculation: (w,h) => { const bsa = Math.sqrt((w*h)/3600); return `1. SC (m²) = √((Peso × Altura) / 3600)<br>= √((${w}×${h})/3600) = <strong>${bsa.toFixed(2)} m²</strong>.<br>2. Carga = SC × 70 mg/m² = <strong>${Math.min(70, 70*bsa).toFixed(0)} mg</strong> (Máx 70mg).<br>3. Manto = SC × 50 mg/m² = <strong>${Math.min(50, 50*bsa).toFixed(0)} mg</strong> (Máx 50mg).`}},
         prednisona_pti: { name: 'Prednisona', group: 'Corticoides', dose: (w) => `Dosis PTI: <strong>${Math.min(4*w, 180).toFixed(1)} mg/día</strong> (por 4 días).`, calculation: (w) => `Dosis = ${w} kg × 4 mg/kg = ${(4*w).toFixed(1)} mg.<br>Dosis final (máx 180mg): <strong>${Math.min(4*w, 180).toFixed(1)} mg/día</strong>.`},
         metilprednisolona_pti: { name: 'Metilprednisolona', group: 'Corticoides', dose: (w) => `Dosis PTI: <strong>${Math.min(30*w, 1000).toFixed(0)} mg/dosis</strong> (por 3 días).`, calculation: (w) => `Dosis = ${w} kg × 30 mg/kg = ${(30*w).toFixed(0)} mg.<br>Dosis final (máx 1g): <strong>${Math.min(30*w, 1000).toFixed(0)} mg/dosis</strong>.`},
+    };
+
+    // --- NUEVO: BASE DE DATOS PARA UMBRALES DE PLAQUETAS ---
+    const procedurePlateletDb = {
+        "neurocirugia": { name: "Neurocirugía", threshold: "≥ 100.000/µl" },
+        "biopsia_hepatica": { name: "Biopsia hepática", threshold: "≥ 50.000/µl" },
+        "bypass_cardiopulmonar": { name: "Bypass cardiopulmonar", threshold: "≥ 50.000/µl" },
+        "cirugia_mayor_leucemia": { name: "Cirugía mayor en leucemias", threshold: "≥ 50.000/µl" },
+        "endoscopia_digestiva": { name: "Endoscopía digestiva", threshold: "≥ 40.000/µl" },
+        "cateter_central": { name: "Colocación de catéter central", threshold: "≥ 40.000/µl" },
+        "fibrobroncoscopia_lba": { name: "Fibrobroncoscopia y LBA", threshold: "≥ 30.000/µl" },
+        "biopsia_hepatica_transyugular": { name: "Biopsia hepática (vía transyugular)", threshold: "≥ 30.000/µl" },
+        "puncion_lumbar_lma": { name: "Punción lumbar (LMA y otras)", threshold: "≥ 25.000/µl" },
+        "puncion_lumbar_lla": { name: "Punción lumbar (LLA)", threshold: "≥ 10.000/µl" }
     };
 
     /**
@@ -259,7 +361,6 @@
     
     // --- FUNCIONES DE CÁLCULO (ASIGNADAS GLOBALMENTE) ---
     function attachCalculatorFunctions() {
-        // ✅ CORRECCIÓN: Se reemplazaron las comas (,) por punto y coma (;)
         window.calculateTlsRisk = () => {
             const resultDiv = document.getElementById("slt-risk-result");
             const ldh = document.getElementById("slt-ldh").value;
@@ -302,7 +403,7 @@
             const weight = parseFloat(document.getElementById("kalemia-weight").value);
             const resultDiv = document.getElementById("kalemia-result");
             if (validateWeight(weight, resultDiv)) {
-                resultDiv.innerHTML = `<ul class="text-sm space-y-1">
+                resultDiv.innerHTML = `<ul class="text-sm space-y-1 text-left">
                     <li><strong class="text-blue-700 dark:text-blue-400">Gluconato Ca 10%:</strong> ${(1.5 * weight).toFixed(1)} ml</li>
                     <li><strong class="text-blue-700 dark:text-blue-400">Sol. Polarizante:</strong> ${(0.75 * weight).toFixed(1)}g Glucosa + ${(0.075 * weight).toFixed(2)}U Insulina</li>
                     <li><strong class="text-blue-700 dark:text-blue-400">NaHCO3:</strong> ${(1.5 * weight).toFixed(1)} mEq</li>
@@ -321,8 +422,11 @@
                 resultDiv.classList.remove("hidden");
                 return;
             }
-            const ironDose = (hbTarget - hbActual) * 0.01 * weight * 80 * 3.4 * 1.5;
-            resultDiv.innerHTML = `Dosis total a reponer: <strong class="text-lg">${ironDose.toFixed(0)} mg</strong>`;
+            // Fórmula del PDF (página 65): (Hb teórica - Hb real) x volemia (ml) x 3,4 x 1,5
+            // Asumimos volemia de 80 ml/kg
+            const volemia = weight * 80;
+            const ironDose = (hbTarget - hbActual) * (volemia / 100) * 3.4 * 1.5;
+            resultDiv.innerHTML = `Dosis total a reponer: <strong class="text-lg">${ironDose.toFixed(0)} mg</strong><p class="text-xs italic mt-1">(Calculado con fórmula de la guía y volemia estimada de 80ml/kg)</p>`;
             resultDiv.classList.remove("hidden");
         };
 
@@ -331,7 +435,7 @@
             const resultDiv = document.getElementById("prophylaxis-result");
             if (validateWeight(weight, resultDiv)) {
                 const condition = document.getElementById("prophylaxis-condition").value;
-                const doses = { term: 1, "preterm-1500-2000": 2, "preterm-750-1500": 3.5, "preterm-lt-750": 5.5 };
+                const doses = { term: 1, "preterm-1500-2000": 2, "preterm-750-1500": 3.5, "preterm-lt-750": 5 };
                 const dose = doses[condition] * weight;
                 resultDiv.innerHTML = `Dosis: <strong class="text-lg">${dose.toFixed(1)} mg/día</strong> de Hierro elemental.`;
                 resultDiv.classList.remove("hidden");
@@ -380,7 +484,7 @@
             if (validateWeight(weight, resultDiv)) {
                 const component = document.querySelector('input[name="component"]:checked').value;
                 if (component === 'rbc') {
-                    resultDiv.innerHTML = `Dosis GR: <strong class="text-lg">${(10 * weight).toFixed(0)} ml</strong> (10 ml/kg).`;
+                    resultDiv.innerHTML = `Dosis GR: <strong class="text-lg">${(10 * weight).toFixed(0)} - ${(15 * weight).toFixed(0)} ml</strong> (10-15 ml/kg).`;
                 } else {
                     resultDiv.innerHTML = `Dosis Plaquetas: <strong class="text-lg">${Math.round(weight / 10)} U</strong> (1U c/10 kg).`;
                 }
@@ -388,101 +492,78 @@
             }
         };
         
-        // ✅ CORRECCIÓN: Lógica y variable 'w' corregidas
         window.calculateIgivInfusion = () => {
             const weight = parseFloat(document.getElementById("igiv-weight").value);
             const resultDiv = document.getElementById("igiv-result");
             if (validateWeight(weight, resultDiv)) {
-                const rates = [0.3, 0.6, 1.2, 2.4, 4.8, 6, 7.2];
-                const intervals = ["30", "30", "30", "30", "hasta finalizar", "hasta finalizar", "hasta finalizar"];
-                let tableHtml = `<h4 class="font-bold mb-2">Plan de Infusión Sugerido</h4>
+                const rates = [0.3, 0.6, 1.2, 2.4, 4.8, 6.0, 7.2];
+                const intervals = ["30", "30", "30", "30", "Hasta finalizar", "Hasta finalizar", "Hasta finalizar"];
+                
+                let tableHtml = `<h4 class="font-bold mb-2">Plan de Infusión Sugerido (Garrahan)</h4>
                     <div class="overflow-x-auto"><table class="w-full text-sm text-left">
                     <thead class="bg-gray-200 dark:bg-gray-600"><tr>
                     <th class="p-2">Intervalo (min)</th><th class="p-2">Velocidad (mL/kg/h)</th><th class="p-2">Velocidad (mL/hora)</th>
                     </tr></thead><tbody>`;
 
                 rates.forEach((rate, index) => {
-                    const infusionRate = Math.min(rate * weight, 150).toFixed(1); // Usar 'weight' en lugar de 'w'
+                    const infusionRate = Math.min(rate * weight, 150).toFixed(1);
                     tableHtml += `<tr class="border-b border-custom">
-                        <td class="p-2">${intervals[index]}</td>
-                        <td class="p-2">${rate}</td>
-                        <td class="p-2 font-bold">${infusionRate}</td>
+                        <td class="p-2">${intervals[index]}</td><td class="p-2">${rate.toFixed(1)}</td><td class="p-2 font-bold">${infusionRate}</td>
                     </tr>`;
                 });
                 
-                tableHtml += '</tbody></table></div><p class="text-xs mt-2 italic">Basado en plantilla Garrahan. Monitorear al paciente.</p>';
+                tableHtml += '</tbody></table></div><p class="text-xs mt-2 italic">Monitorear al paciente. No superar 150 ml/h en la mayoría de las marcas.</p>';
                 resultDiv.innerHTML = tableHtml;
                 resultDiv.classList.remove("hidden");
             }
         };
-
-        window.handleNfAlgorithm = (decision) => {
-            const section = document.getElementById("neutropenia-febril");
-            const step1 = section.querySelector("#nf-step-1");
-            const step2 = section.querySelector("#nf-step-2");
-            const resultDiv = section.querySelector("#nf-result");
-            const resetBtn = section.querySelector("#nf-reset-btn");
-            let resultHtml = "";
-            step1.classList.add("hidden");
-            if (decision === 'sepsis_yes') {
-                resultHtml = '<p class="font-bold text-red-700">Tratamiento:</p><p>Carbapenem + Vancomicina.</p>';
-                step2.classList.add("hidden");
-            } else if (decision === 'sepsis_no') {
-                step2.classList.remove("hidden");
-                return; // Espera la siguiente decisión
-            } else if (decision === 'nfar_yes') {
-                resultHtml = '<p class="font-bold text-orange-700">Tratamiento (NFAR):</p><p>Cefepime o Pipe-Tazo.</p>';
-                step2.classList.add("hidden");
-            } else if (decision === 'nfar_no') {
-                resultHtml = '<p class="font-bold text-green-700">Tratamiento (NFBR):</p><p>Ceftriaxona o Cefotaxima.</p>';
-                step2.classList.add("hidden");
+        
+        // --- NUEVA FUNCIÓN ---
+        window.getPlateletThreshold = () => {
+            const procedureKey = document.getElementById('procedure-select').value;
+            const resultDiv = document.getElementById('procedure-result');
+            if (procedureKey && procedurePlateletDb[procedureKey]) {
+                const procedure = procedurePlateletDb[procedureKey];
+                resultDiv.innerHTML = `Para <strong>${procedure.name}</strong>, el umbral de plaquetas sugerido es: <strong class="text-lg">${procedure.threshold}</strong>`;
+                resultDiv.classList.remove('hidden');
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600">Por favor, seleccione un procedimiento.</p>`;
+                resultDiv.classList.remove('hidden');
             }
-            resultDiv.innerHTML = resultHtml;
-            resultDiv.classList.remove("hidden");
-            resetBtn.classList.remove("hidden");
         };
+        
+        // --- FUNCIÓN MEJORADA ---
+        window.stratifyNfRisk = () => {
+            const checkboxes = document.querySelectorAll('#nf-risk-stratification-form input[type="checkbox"]:checked');
+            const criteria = new Set(Array.from(checkboxes).map(cb => cb.value));
+            const resultDiv = document.getElementById('nf-stratification-result');
+            let risk = 'NFBR'; // Bajo Riesgo por defecto
+            let treatment = '<strong>Tratamiento (NFBR):</strong> Ceftriaxona o Cefotaxima.';
+            let reason = 'No cumple criterios de Alto Riesgo.';
 
-        window.resetNfAlgorithm = () => {
-            const section = document.getElementById("neutropenia-febril");
-            section.querySelector("#nf-step-1").classList.remove("hidden");
-            section.querySelector("#nf-step-2").classList.add("hidden");
-            section.querySelector("#nf-result").classList.add("hidden");
-            section.querySelector("#nf-reset-btn").classList.add("hidden");
-        };
-
-        window.handleCvcAlgorithm = (decision) => {
-            const section = document.getElementById("neutropenia-febril");
-            const step1 = section.querySelector("#cvc-step-1");
-            const step2 = section.querySelector("#cvc-step-2");
-            const resultDiv = section.querySelector("#cvc-result");
-            const resetBtn = section.querySelector("#cvc-reset-btn");
-            let resultHtml = "";
-            step1.classList.add("hidden");
-            if (decision === 'comp_yes') {
-                resultHtml = '<p class="font-bold text-red-700">Acción:</p><p>Remover CVC + Terapia Sistémica.</p>';
-            } else if (decision === 'comp_no') {
-                step2.classList.remove("hidden");
-                return; // Espera la siguiente decisión
-            } else if (decision === 'microbe_selected') {
-                const microbe = section.querySelector("#cvc-microorganism").value;
-                if (microbe === 's_aureus') {
-                    resultHtml = '<p class="font-bold text-red-700">Acción:</p><p>Remover CVC + Terapia Sistémica.</p>';
-                } else {
-                    resultHtml = '<p class="font-bold text-green-700">Acción:</p><p>Terapia de Rescate (Sistémica + Sello).</p>';
+            if (criteria.has('sepsis')) {
+                risk = 'Sepsis';
+                treatment = '<strong>Tratamiento (Sepsis/Shock):</strong> Carbapenem + Vancomicina.';
+                reason = 'Presencia de signos de Sepsis / Shock.';
+            } else {
+                const hasMajorCriteria = criteria.has('lma_lla') || criteria.has('hipotension') || criteria.has('pcr');
+                const hasMinorCriteria = criteria.has('days_qt') && criteria.has('platelets');
+                
+                if (hasMajorCriteria || hasMinorCriteria) {
+                    risk = 'NFAR';
+                    treatment = '<strong>Tratamiento (NFAR):</strong> Cefepime o Piperacilina-Tazobactam.';
+                    if (hasMajorCriteria) {
+                        reason = 'Cumple al menos un criterio mayor de Alto Riesgo.';
+                    } else {
+                        reason = 'Cumple los dos criterios menores de Alto Riesgo.';
+                    }
                 }
-                step2.classList.add("hidden");
             }
-            resultDiv.innerHTML = resultHtml;
-            resultDiv.classList.remove("hidden");
-            resetBtn.classList.remove("hidden");
-        };
-
-        window.resetCvcAlgorithm = () => {
-            const section = document.getElementById("neutropenia-febril");
-            section.querySelector("#cvc-step-1").classList.remove("hidden");
-            section.querySelector("#cvc-step-2").classList.add("hidden");
-            section.querySelector("#cvc-result").classList.add("hidden");
-            section.querySelector("#cvc-reset-btn").classList.add("hidden");
+            
+            resultDiv.innerHTML = `<p class="font-bold text-lg ${risk === 'Sepsis' ? 'text-red-700' : risk === 'NFAR' ? 'text-orange-700' : 'text-green-700'}">Riesgo: ${risk}</p>
+                                   <p class="text-sm">${reason}</p>
+                                   <p class="mt-2">${treatment}</p>`;
+            resultDiv.classList.remove('hidden');
         };
     }
     
@@ -511,20 +592,6 @@
         });
     }
 
-    function setupTabs() {
-        document.querySelectorAll(".tab-btn").forEach(button => {
-            button.addEventListener("click", () => {
-                const tabId = button.dataset.tab;
-                const card = button.closest(".bg-card");
-                card.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-                button.classList.add("active");
-                card.querySelectorAll(".tab-content").forEach(content => {
-                    content.classList.toggle("active", content.id === `tab-content-${tabId}`);
-                });
-            });
-        });
-    }
-
     function setupFavorites() {
         const toggleBtn = document.getElementById("favorites-toggle-btn");
         const closeBtn = document.getElementById("close-favorites-btn");
@@ -540,26 +607,17 @@
         });
     }
 
-    function getFavorites() {
-        return JSON.parse(localStorage.getItem("hemoncoFavoritesV5")) || [];
-    }
-
+    function getFavorites() { return JSON.parse(localStorage.getItem("hemoncoFavoritesV5")) || []; }
     function saveFavorites(favorites) {
         localStorage.setItem("hemoncoFavoritesV5", JSON.stringify(favorites));
         loadFavorites();
     }
-
     function toggleFavorite(id, title) {
         let favorites = getFavorites();
         const index = favorites.findIndex(fav => fav.id === id);
-        if (index > -1) {
-            favorites.splice(index, 1);
-        } else {
-            favorites.push({ id, title });
-        }
+        if (index > -1) { favorites.splice(index, 1); } else { favorites.push({ id, title }); }
         saveFavorites(favorites);
     }
-
     function loadFavorites() {
         const favorites = getFavorites();
         document.querySelectorAll(".favorite-btn").forEach(button => {
@@ -589,7 +647,7 @@
             highlightText(document.getElementById("main-content"), regex);
         };
         const highlightText = (node, regex) => {
-            if (node.nodeType === 3) { // Text node
+            if (node.nodeType === 3) {
                 if (node.nodeValue.match(regex)) {
                     const span = document.createElement("span");
                     span.innerHTML = node.nodeValue.replace(regex, match => `<span class="highlight">${match}</span>`);
@@ -601,7 +659,6 @@
         };
         searchInput.addEventListener("input", (e) => search(e.target.value));
     }
-
     function removeHighlights() {
         document.querySelectorAll("span.highlight").forEach(el => {
             const parent = el.parentNode;
@@ -643,6 +700,18 @@
                 <div class="mt-4 text-sm flex space-x-4 border-t border-custom pt-3"><a href="${nameUrl}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Vademecum (Nombre)</a><a href="${groupUrl}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Vademecum (Grupo)</a></div>`;
             resultDiv.classList.remove('hidden');
         });
+    }
+    
+    // --- NUEVA FUNCIÓN DE INICIALIZACIÓN ---
+    function populateProcedureSelect() {
+        const select = document.getElementById('procedure-select');
+        select.innerHTML = '<option value="">-- Seleccione Procedimiento --</option>'; // Opción por defecto
+        for (const key in procedurePlateletDb) {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = procedurePlateletDb[key].name;
+            select.appendChild(option);
+        }
     }
 </script>
 
